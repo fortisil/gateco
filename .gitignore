@@ -1,0 +1,76 @@
+# ── Environment files ──
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.staging
+!.env.example
+
+# ── Markdown files (except README.md) ──
+*.md
+!README.md
+
+# ── Dependencies ──
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+env/
+.eggs/
+*.egg-info/
+
+# ── Build outputs ──
+dist/
+build/
+
+# ── IDE / Editor ──
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── Testing ──
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+.nyc_output/
+.ruff_cache/
+
+# ── OS files ──
+.DS_Store
+Thumbs.db
+
+# ── Logs ──
+*.log
+npm-debug.log*
+pip-log.txt
+
+# ── Docker ──
+*.pid
+
+# ── Project-specific ──
+.popeye/
+data/
+skills/
+
+# ── Agent artifacts ──
+.claude/
+.agents/
+.serena/
+skills-lock.json
+.mcp.json
+**/docs/misc/
+**/docs/consensus/
+**/docs/tasks/
+**/docs/conversations/
+**/docs/.artifacts/
+**/docs/checks/
+**/docs/snapshots/
+**/docs/incidents/
+**/docs/audit/

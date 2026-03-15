@@ -1,0 +1,23 @@
+{
+  "name": "@gateco/social-scripts",
+  "version": "1.0.0",
+  "description": "Validation and automation scripts for Gateco social media content",
+  "type": "module",
+  "scripts": {
+    "validate": "npx tsx validate-calendar.ts",
+    "validate:all": "npx tsx validate-calendar.ts --all",
+    "analyze": "npx tsx analyze-calendar.ts",
+    "report": "npx tsx generate-report.ts"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "chalk": "^5.3.0",
+    "glob": "^10.3.10"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}

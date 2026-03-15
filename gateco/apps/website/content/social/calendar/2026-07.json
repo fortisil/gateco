@@ -1,0 +1,429 @@
+{
+  "month": 7,
+  "year": 2026,
+  "entries": [
+    {
+      "id": "2026-07-01-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-01",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Zero-Trust for AI Systems\n\nZero-trust isn't new. It's the standard for cloud and network security.\n\nBut most AI systems still operate on implicit trust:\n\n- Trust that the user should see all indexed content\n- Trust that the LLM won't leak sensitive data\n- Trust that embedding filters are sufficient\n- Trust that no one will ask the wrong question\n\nThis is the opposite of zero-trust.\n\nApplying zero-trust to AI retrieval:\n\n1. NEVER TRUST, ALWAYS VERIFY\nEvery retrieval request must include identity context.\n\n2. LEAST PRIVILEGE\nReturn only what the user is explicitly authorized to see.\n\n3. ASSUME BREACH\nDesign as if attackers have valid credentials.\n\n4. VERIFY EXPLICITLY\nVerify attributes at query time, not role assumptions.\n\nZero-trust for AI isn't optional anymore.",
+        "headline": "Zero-Trust for AI",
+        "hashtags": ["#ZeroTrust", "#AISecurityInfrastructure", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": ["enterprise"]
+      },
+      "notes": "Security Deep-Dive series - Post 4"
+    },
+    {
+      "id": "2026-07-01-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-07-01",
+      "scheduledTime": "08:00",
+      "contentType": "thread",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "thread": [
+          "Zero-trust for AI systems:\n\nMost RAG deployments operate on implicit trust.\n\nHere's how to apply zero-trust principles 👇",
+          "1/ NEVER TRUST, ALWAYS VERIFY\n\nEvery query needs identity context.\nNo anonymous queries.\nNo default access.\n\nIdentity verified on every single request.",
+          "2/ LEAST PRIVILEGE\n\nReturn only authorized content.\nNot \"relevant\" chunks. Authorized chunks.\n\nDefault deny, explicit allow.",
+          "3/ ASSUME BREACH\n\nDesign as if attackers have valid credentials.\nLimit blast radius through fine-grained policies.\nLog everything for forensics.",
+          "4/ VERIFY EXPLICITLY\n\nDon't rely on previous authentication.\nVerify attributes at query time.\nDynamic policy evaluation.\n\n#ZeroTrust #AISecurityInfrastructure"
+        ],
+        "hashtags": ["#ZeroTrust", "#AISecurityInfrastructure"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Zero-trust thread"
+    },
+    {
+      "id": "2026-07-02-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-02",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Performance Optimization Tips for Permission-Aware RAG\n\nAdding security adds latency. Here's how to minimize it:\n\nTIP 1: Pre-fetch identity\nCache user context at session start, reuse for all queries.\nSaves: 50-100ms per query\n\nTIP 2: Batch policy evaluation\nEvaluate all top-K chunks in one call, not K calls.\nSaves: (K-1) * round-trip-time\n\nTIP 3: Use policy hints\nIf you know likely access patterns, tell the engine.\nSaves: 10-20% on evaluation\n\nTIP 4: Cache decisions\nSame user + same resource = same answer.\nSaves: 2-5ms per cached decision\n\nBenchmarks:\nWithout optimization: P99 45ms\nWith all optimizations: P99 8ms\n\nThat's production-ready.",
+        "headline": "Performance Optimization",
+        "cta": "See performance documentation",
+        "link": "https://gateco.io/docs",
+        "hashtags": ["#Performance", "#RAGSecurity", "#EngineeringTips"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Developer Education series - Post 4"
+    },
+    {
+      "id": "2026-07-03-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-03",
+      "scheduledTime": "10:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "The Permission Gap No One Talks About\n\nThere's a gap in enterprise security that nobody is discussing.\n\nOn one side: Identity and Access Management\nYou know who your users are. You control what systems they access.\n\nOn the other side: AI/ML Systems\nYou're deploying copilots and assistants that answer questions using internal data.\n\nIn the middle: A gap.\n\nYour IAM doesn't extend to AI retrieval.\nYour AI doesn't respect your access policies.\nThe connection doesn't exist.\n\nVector DBs don't integrate with identity providers.\nEmbedding similarity ignores permission boundaries.\nAI retrieval happens outside traditional security perimeters.\n\nClosing this gap requires:\n- Identity context on every query\n- Permission evaluation on every result\n- Audit logging of every decision\n\nThis is the missing layer.",
+        "headline": "The Permission Gap",
+        "hashtags": ["#AISecurityInfrastructure", "#EnterpriseAI", "#IdentityManagement"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": ["enterprise"]
+      },
+      "notes": "Thought Leadership series - Post 4"
+    },
+    {
+      "id": "2026-07-07-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-07",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Q2 lessons from enterprise AI deployments:\n\nWhat's working:\n→ Runtime permission evaluation (no re-embedding debt)\n→ Starting with audit-mode before enforcement\n→ Clear classification standards before deployment\n\nWhat's not working:\n→ Metadata filters as security controls\n→ Prompt-based access restrictions\n→ Big-bang enforcement without testing\n\nWhat's surprising:\n→ Most incidents are curiosity, not malice\n→ Policy complexity scales faster than expected\n→ Audit logs generate more value than anticipated\n\nLessons for Q3:\nStart with visibility. Move to enforcement gradually.",
+        "headline": "Q2 Learnings",
+        "hashtags": ["#EnterpriseAI", "#RAGSecurity", "#LessonsLearned"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Quarterly reflection"
+    },
+    {
+      "id": "2026-07-08-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-08",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Common mistake: Treating metadata filters as security.\n\nI see this in almost every RAG architecture review.\n\n\"We filter by department in the metadata.\"\n\"We add user_id to the query filter.\"\n\"We partition by tenant.\"\n\nThese are performance optimizations, not security controls.\n\nWhy metadata filters aren't security:\n\n1. They can be bypassed via API\nIf someone queries your vector DB directly, filters are optional.\n\n2. They require perfect tagging\nOne untagged document = security hole.\n\n3. They don't create audit trails\nNo record of who saw what.\n\n4. They can't express complex policies\n\"Access if user.clearance >= doc.classification\" isn't a metadata filter.\n\nMetadata filters reduce what the vector DB searches.\nPermission evaluation validates what gets returned.\n\nBoth are useful. Only one is security.",
+        "headline": "Metadata Filters vs Security",
+        "hashtags": ["#RAGSecurity", "#VectorDatabase", "#AISecurityInfrastructure"]
+      },
+      "targeting": {
+        "persona": "platform-engineer",
+        "industry": []
+      },
+      "notes": "Technical education - common mistake"
+    },
+    {
+      "id": "2026-07-08-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-07-08",
+      "scheduledTime": "08:00",
+      "contentType": "thread",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "thread": [
+          "🧵 Performance optimization for permission-aware RAG\n\nHow to add security without killing latency:",
+          "1/ PRE-FETCH IDENTITY\n\nResolve user context once at session start.\nReuse for all queries in session.\n\nSaves: 50-100ms per query",
+          "2/ BATCH EVALUATION\n\nEvaluate all chunks in one call.\n\nBad: N round trips for N chunks\nGood: 1 round trip for all chunks\n\nSaves: (N-1) * round-trip-time",
+          "3/ CACHE DECISIONS\n\nSame user + same resource = same answer\n\nSet reasonable TTL.\nInvalidate on policy change.\n\nSaves: 2-5ms per cached hit",
+          "4/ RESULTS:\n\nWithout optimization: P99 45ms\nWith all optimizations: P99 8ms\n\nProduction-ready for real-time AI.\n\nFull guide: https://gateco.io/docs\n\n#Performance #RAGSecurity"
+        ],
+        "hashtags": ["#Performance", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Performance optimization thread"
+    },
+    {
+      "id": "2026-07-09-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-09",
+      "scheduledTime": "09:00",
+      "contentType": "industry-news",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "Compliance update: What auditors are asking about AI systems in Q3 2026.\n\nQuestions we're seeing:\n\n1. \"How do you control AI access to customer data?\"\nExpected answer: Policy-based access control, not just network isolation.\n\n2. \"Can you provide audit logs for AI queries?\"\nExpected answer: Per-query logs with user identity and returned data.\n\n3. \"How do permission changes propagate to AI systems?\"\nExpected answer: Real-time or near-real-time, not \"requires re-embedding.\"\n\n4. \"What happens when an employee is terminated?\"\nExpected answer: Immediate access revocation for AI queries.\n\nIf you don't have good answers to these questions, auditors will flag it.\n\nCompliance isn't slowing down. It's catching up to AI.",
+        "headline": "Q3 Compliance Trends",
+        "hashtags": ["#AICompliance", "#EnterpriseAI", "#Audit"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": ["finance", "healthcare"]
+      },
+      "notes": "Compliance trends update"
+    },
+    {
+      "id": "2026-07-10-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-10",
+      "scheduledTime": "10:00",
+      "contentType": "product-highlight",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "Feature spotlight: Audit Dashboard\n\nAnswering \"who accessed what through AI\" shouldn't require SQL queries.\n\nThe Gateco Audit Dashboard shows:\n\n→ Query volume by user, department, resource\n→ Permission decisions (allows vs denies)\n→ Trending queries and access patterns\n→ Anomaly detection alerts\n→ Compliance report exports\n\nBuilt for security teams who need visibility, not just logs.\n\nAvailable in Gateco Pro: https://gateco.io/pricing",
+        "headline": "Audit Dashboard",
+        "cta": "Explore Gateco Pro",
+        "link": "https://gateco.io/pricing",
+        "hashtags": ["#Gateco", "#AIGovernance"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Audit Dashboard feature"
+    },
+    {
+      "id": "2026-07-14-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-14",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "The most common objection I hear:\n\n\"We trust our employees. They won't query data they shouldn't.\"\n\nHere's what I've learned:\n\nMost unauthorized access isn't malicious. It's curious.\n\n\"What's the CEO's salary?\" - curious\n\"What's happening with the acquisition?\" - curious\n\"Why did Sarah get promoted?\" - curious\n\nCuriosity + access = exposure.\n\nTrust your employees. Also: limit blast radius.\n\nThe two aren't mutually exclusive.\n\nSecurity isn't about distrust. It's about appropriate boundaries.",
+        "headline": "Trust vs. Boundaries",
+        "hashtags": ["#DataSecurity", "#EnterpriseAI", "#SecurityMindset"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Trust objection handling"
+    },
+    {
+      "id": "2026-07-15-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-15",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "LangChain + Gateco integration guide:\n\n```python\nfrom langchain import VectorStoreRetriever\nfrom gateco import GatecoRetriever\n\n# Wrap your existing retriever\nsecure_retriever = GatecoRetriever(\n    retriever=your_existing_retriever,\n    user_context_fn=get_current_user\n)\n\n# Use in your chain\nchain = RetrievalQA(\n    retriever=secure_retriever,\n    llm=your_llm\n)\n```\n\nThat's it. Every retrieval now:\n✅ Evaluates permissions\n✅ Filters unauthorized chunks\n✅ Logs access decisions\n\nNo changes to your prompts. No changes to your vector DB.\n\nFull guide: https://gateco.io/docs/langchain",
+        "headline": "LangChain Integration",
+        "cta": "See integration guide",
+        "link": "https://gateco.io/docs/langchain",
+        "hashtags": ["#LangChain", "#Gateco", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "LangChain integration"
+    },
+    {
+      "id": "2026-07-16-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-16",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "Use Case: Healthcare AI Assistant\n\nA regional health system deployed an AI assistant for clinical and administrative staff.\n\nThe challenge:\n→ Clinical staff needed patient records\n→ Administrative staff needed policies and procedures\n→ HR staff needed personnel files\n→ HIPAA required strict access boundaries\n\nThe problem:\nTraditional RAG gave everyone access to everything.\n\nThe solution:\n→ Role-based policy: Clinicians access patient data\n→ Attribute-based: Access based on care team membership\n→ Audit trail: Every query logged for HIPAA compliance\n\nThe result:\n→ 15,000 employees using AI securely\n→ Zero HIPAA violations since deployment\n→ Full audit capability for compliance reviews\n\nSame AI. Different authorized answers. Proper boundaries.",
+        "headline": "Healthcare Use Case",
+        "hashtags": ["#HealthcareAI", "#HIPAA", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": ["healthcare"]
+      },
+      "notes": "Healthcare use case"
+    },
+    {
+      "id": "2026-07-17-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-17",
+      "scheduledTime": "10:00",
+      "contentType": "product-highlight",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "What's new in Gateco - July 2026:\n\n1. LlamaIndex Native Integration\nDrop-in replacement for your retriever. 3-line integration.\n\n2. AWS IAM Identity Center Sync\nAuto-sync users and groups from IAM Identity Center.\n\n3. Policy Versioning\nFull version history. Rollback to any previous state.\n\n4. Denial Reason Explanations\nWhy was this query blocked? Clear explanations for debugging.\n\n5. Improved Dashboard Performance\nAudit dashboard loads 3x faster for large deployments.\n\nUpgrade now: https://gateco.io\n\n#Gateco #ProductUpdate",
+        "headline": "July Product Update",
+        "cta": "See what's new",
+        "link": "https://gateco.io",
+        "hashtags": ["#Gateco", "#ProductUpdate"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "Monthly product update"
+    },
+    {
+      "id": "2026-07-21-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-21",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Every enterprise I talk to has the same plan:\n\n\"We'll add security after we prove value.\"\n\nThe problem with this approach:\n\n1. You train users on insecure patterns\nThey get used to seeing everything. Security feels like a downgrade.\n\n2. You accumulate compliance debt\nEvery day without audit logs is a day you can't account for.\n\n3. You make retrofitting harder\nCode assumes broad access. Narrowing scope breaks things.\n\n4. You risk incidents before you're ready\nValue proof = real data = real exposure.\n\nBetter approach:\nDeploy with security from day one. Start in audit mode.\nSee what would be blocked. Then enforce.\n\nSecurity and velocity aren't opposed. They're sequenced.",
+        "headline": "Security After Value?",
+        "hashtags": ["#SecurityFirst", "#EnterpriseAI", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Security first argument"
+    },
+    {
+      "id": "2026-07-22-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-22",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Debugging permission denials: A practical guide\n\nWhen users report \"I can't see my data,\" here's the workflow:\n\n1. VERIFY IDENTITY\nIs the right user being sent? Check: service account vs actual user.\n\n2. CHECK RESOURCE METADATA\nDoes the document have correct attributes? Missing tags = common failure.\n\n3. TRACE POLICY EVALUATION\nWalk through the decision. Which rules matched? Which failed?\n\n4. COMPARE WITH WORKING USER\nFind someone who CAN access. Compare attributes.\n\n5. TEST BEFORE FIXING\nSimulate the fix. Verify before production.\n\n90% of issues are:\n- Identity propagation (40%)\n- Resource metadata gaps (30%)\n- Policy logic errors (20%)\n- Cache staleness (10%)\n\nFull debugging guide: https://gateco.io/docs/debugging",
+        "headline": "Debugging Permission Denials",
+        "cta": "See debugging guide",
+        "link": "https://gateco.io/docs/debugging",
+        "hashtags": ["#Debugging", "#RAGSecurity", "#DevOps"]
+      },
+      "targeting": {
+        "persona": "platform-engineer",
+        "industry": []
+      },
+      "notes": "Developer Education series - debugging"
+    },
+    {
+      "id": "2026-07-23-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-23",
+      "scheduledTime": "09:00",
+      "contentType": "industry-news",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "Financial services AI is under scrutiny.\n\nWhat we're seeing in Q3:\n\n→ Regulators asking about AI data access controls\n→ Client audits including AI-specific questionnaires\n→ RFPs requiring AI security documentation\n\nWhat's being asked:\n\n\"How do you prevent analysts from accessing unauthorized research?\"\n\"Can you demonstrate client data isolation in AI systems?\"\n\"What's your audit trail for AI-assisted decisions?\"\n\nThe firms that can answer these questions win deals.\nThe firms that can't are losing them.\n\nAI security isn't just risk mitigation. It's competitive advantage.",
+        "headline": "Financial Services AI Scrutiny",
+        "hashtags": ["#FinancialServices", "#AICompliance", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": ["finance"]
+      },
+      "notes": "Financial services focus"
+    },
+    {
+      "id": "2026-07-24-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-24",
+      "scheduledTime": "10:00",
+      "contentType": "engagement",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "Question for security architects:\n\nWhen evaluating AI security solutions, what's your top priority?\n\nA) Integration simplicity (drop-in replacement)\nB) Policy flexibility (RBAC, ABAC, custom)\nC) Audit capabilities (compliance, forensics)\nD) Performance impact (<10ms latency)\nE) Something else? (tell me in comments)\n\nGenuinely curious what matters most in your environment.\n\n#AISecurityInfrastructure #EnterpriseAI",
+        "headline": "Priority Poll",
+        "hashtags": ["#AISecurityInfrastructure", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Engagement poll"
+    },
+    {
+      "id": "2026-07-28-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-28",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Looking ahead: What's next for AI security?\n\nNear-term (next 6 months):\n→ AI access controls become standard in compliance frameworks\n→ More vector DB vendors add basic permission features\n→ Security teams formalize AI access policies\n\nMedium-term (6-18 months):\n→ Multi-agent authorization becomes critical\n→ AI-to-AI access control emerges as a pattern\n→ Specialized AI security roles appear\n\nLong-term (18+ months):\n→ AI security becomes as standard as HTTPS\n→ Real-time policy enforcement assumed, not special\n→ Audit requirements formalized in regulation\n\nThe organizations building these capabilities now will lead.\nThose waiting will be catching up.",
+        "headline": "AI Security Roadmap",
+        "hashtags": ["#AISecurityInfrastructure", "#FutureOfWork", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Forward-looking piece"
+    },
+    {
+      "id": "2026-07-29-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-29",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Testing permission policies: A framework\n\nPolicies are code. Test them like code.\n\nLayer 1: Unit Tests\nTest individual rules in isolation.\n\nLayer 2: Integration Tests\nTest rule combinations and overrides.\n\nLayer 3: Scenario Tests\nTest real-world user journeys.\n\nLayer 4: Regression Tests\nEvery production incident becomes a test.\n\nLayer 5: Chaos Tests\nWhat happens with bad data?\n\nCoverage target: 100% for DENY paths.\n\nFalse negatives = annoying\nFalse positives = security breach\n\nPrioritize accordingly.",
+        "headline": "Testing Permission Policies",
+        "cta": "See testing framework",
+        "link": "https://gateco.io/docs/testing",
+        "hashtags": ["#Testing", "#PolicyEngine", "#QualityAssurance"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Developer Education series - testing"
+    },
+    {
+      "id": "2026-07-30-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-30",
+      "scheduledTime": "09:00",
+      "contentType": "industry-news",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "EU AI Act implementation is accelerating.\n\nWhat this means for enterprise AI:\n\n→ High-risk AI systems need conformity assessments\n→ Transparency requirements for AI decision-making\n→ Risk management obligations for deployers\n→ Penalties up to 7% of global turnover\n\nFor RAG systems specifically:\n\n→ Document who can access what data through AI\n→ Maintain audit trails of AI queries and responses\n→ Demonstrate human oversight capabilities\n→ Show risk mitigation measures\n\nCompliance timelines are approaching. Now is the time to prepare.\n\nThe organizations with AI governance in place will adapt easily.\nThose without will scramble.",
+        "headline": "EU AI Act Update",
+        "hashtags": ["#EUAIAct", "#AICompliance", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Regulatory update"
+    },
+    {
+      "id": "2026-07-31-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-07-31",
+      "scheduledTime": "10:00",
+      "contentType": "thought-leadership",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "July recap: What we've been building and learning.\n\nNEW THIS MONTH:\n→ LlamaIndex native integration\n→ AWS IAM Identity Center sync\n→ Policy versioning and rollback\n→ Improved audit dashboard performance\n\nWHAT WE'RE HEARING:\n→ Policy complexity scales faster than teams expect\n→ Audit logs reveal more value than anticipated\n→ Starting in audit mode prevents painful migrations\n\nLOOKING AHEAD:\n→ More identity provider integrations\n→ Multi-agent authorization patterns\n→ Enhanced anomaly detection\n\nThanks to everyone building secure AI with us.\n\nStart free: https://gateco.io",
+        "headline": "July Recap",
+        "cta": "Start free",
+        "link": "https://gateco.io",
+        "hashtags": ["#Gateco", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "End of month recap"
+    }
+  ]
+}

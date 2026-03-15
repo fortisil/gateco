@@ -1,0 +1,653 @@
+{
+  "month": 6,
+  "year": 2026,
+  "entries": [
+    {
+      "id": "2026-06-01-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-01",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "AI agents are fundamentally different from AI copilots.\n\nCopilots:\n→ Human-in-the-loop\n→ User sees every action\n→ User approves decisions\n\nAgents:\n→ Autonomous execution\n→ Multi-step reasoning\n→ Independent data access\n\nThe security model must be different too.\n\nAgent authorization isn't user authorization with extra steps.\n\nIt's delegated authority with constraints:\n\n1. Scope Boundaries\n→ What data can this agent access?\n→ Not what can the user access\n\n2. Action Limits\n→ What operations are permitted?\n→ Read-only? Write? Execute?\n\n3. Time Constraints\n→ How long is this authority valid?\n→ Session-based or task-based?\n\n4. Audit Requirements\n→ What did the agent actually do?\n→ Complete decision trace\n\nIf you're deploying AI agents, your permission model needs an upgrade.",
+        "headline": "AI Agent Authorization: A Different Model",
+        "cta": "Learn about agent authorization",
+        "link": "https://gateco.io/docs/agents?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-01-linkedin-001",
+        "hashtags": ["#AIAgents", "#EnterpriseAI", "#AISecurityInfrastructure"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": ["enterprise"]
+      },
+      "notes": "Week 1: Security Gap - Agent authorization intro"
+    },
+    {
+      "id": "2026-06-01-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-01",
+      "scheduledTime": "08:00",
+      "contentType": "thread",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "thread": [
+          "AI agents need a different security model than AI copilots.\n\nHere's why the distinction matters 🧵",
+          "1/ Copilots have a human-in-the-loop.\n\nUser sees every action.\nUser approves decisions.\nUser is the authorization boundary.",
+          "2/ Agents operate autonomously.\n\nMulti-step reasoning.\nIndependent data access.\nDecisions made without human review.",
+          "3/ The question changes:\n\nCopilot: \"What can the user access?\"\nAgent: \"What can THIS AGENT access ON BEHALF OF the user?\"\n\nDelegated authority with constraints.",
+          "4/ Agent authorization requires:\n→ Scope boundaries (what data?)\n→ Action limits (read? write?)\n→ Time constraints (how long valid?)\n→ Complete audit trail\n\nDifferent problem. Different solution."
+        ],
+        "hashtags": ["#AIAgents", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Week 1: Security Gap - Agent authorization thread"
+    },
+    {
+      "id": "2026-06-02-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-02",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Your AI agent made 47 retrieval decisions in the last 5 seconds.\n\nCan you explain any of them?\n\nThis is the observability gap in agentic AI.\n\nWhen agents:\n→ Browse multiple data sources\n→ Chain retrieval queries\n→ Make autonomous decisions\n\nTraditional logging shows: \"Agent completed task.\"\n\nIt doesn't show:\n→ Which documents were considered\n→ Which were filtered by permissions\n→ Which informed the final answer\n→ Why certain paths were taken\n\nFor enterprise deployment, you need retrieval-level observability.\n\nNot just \"what did the agent output?\"\n\nBut \"how did the agent get there?\"\n\nGateco logs every retrieval decision in the chain.\n\nEvery permission check. Every policy evaluation. Every filtering decision.\n\nAgent reasoning should be auditable.",
+        "headline": "The Observability Gap in Agentic AI",
+        "cta": "See how Gateco enables agent observability",
+        "link": "https://gateco.io/docs/audit-logs?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-02-linkedin-001",
+        "hashtags": ["#AIAgents", "#AIGovernance", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Week 1: Security Gap - Agent observability"
+    },
+    {
+      "id": "2026-06-02-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-02",
+      "scheduledTime": "12:00",
+      "contentType": "engagement",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Your AI agent made 47 retrieval decisions in 5 seconds.\n\nCan you explain any of them?\n\n\"Agent completed task\" isn't enterprise-grade observability.\n\nYou need retrieval-level logging:\n→ Documents considered\n→ Permissions checked\n→ Filtering decisions\n→ Reasoning paths",
+        "hashtags": ["#AIAgents", "#AIGovernance"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Quick insight - agent observability"
+    },
+    {
+      "id": "2026-06-03-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-03",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Least privilege for AI agents is harder than you think.\n\nFor humans:\n→ Define role\n→ Assign permissions\n→ Review periodically\n\nFor agents:\n→ What's the \"role\" of an agent that can do anything?\n→ How do you scope permissions for emergent behavior?\n→ How often is \"periodically\" when agents run continuously?\n\nThe challenge: agents don't fit traditional IAM models.\n\nThey're not users (no identity lifecycle).\nThey're not services (behavior varies by task).\nThey're not applications (scope changes dynamically).\n\nThe solution: task-scoped authorization.\n\n→ Grant permissions for this specific task\n→ Constrain to this specific scope\n→ Expire after this specific duration\n→ Audit every action within the grant\n\nAgents need just-in-time, just-enough permissions.\n\nNot static role assignments.",
+        "headline": "Least Privilege for AI Agents",
+        "cta": "Learn about dynamic authorization",
+        "link": "https://gateco.io/docs/agent-scopes?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-03-linkedin-001",
+        "hashtags": ["#AIAgents", "#AISecurityInfrastructure", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Week 1: Security Gap - Least privilege for agents"
+    },
+    {
+      "id": "2026-06-03-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-03",
+      "scheduledTime": "17:00",
+      "contentType": "engagement",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Least privilege for AI agents:\n\nAgents don't fit traditional IAM models.\n\nNot users (no identity lifecycle)\nNot services (behavior varies)\nNot apps (scope changes dynamically)\n\nSolution: task-scoped authorization.\n\nJust-in-time. Just-enough. Fully audited.",
+        "hashtags": ["#AIAgents", "#AISecurityInfrastructure"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Quick insight - least privilege"
+    },
+    {
+      "id": "2026-06-04-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-04",
+      "scheduledTime": "10:00",
+      "contentType": "engagement",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Question for teams deploying AI agents:\n\nHow are you handling agent authorization?\n\n→ Same as user permissions?\n→ Service account approach?\n→ Custom scope system?\n→ Still figuring it out?\n\nCurious what's working in practice.",
+        "headline": "Agent Authorization Poll",
+        "cta": "Share your approach",
+        "link": "",
+        "hashtags": ["#AIAgents", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Week 1: Friday engagement - Poll"
+    },
+    {
+      "id": "2026-06-08-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-08",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Implementing agent authorization scopes in Gateco:\n\n```python\nfrom gateco import GatecoClient, AgentScope\n\nclient = GatecoClient(api_key=\"gco_...\")\n\n# Define scope for this agent task\nscope = AgentScope(\n    principal=\"user:alice@company.com\",  # On behalf of\n    resources=[\"project:phoenix/*\"],       # Can access\n    actions=[\"read\"],                       # Read only\n    expires_in=300,                         # 5 minutes\n    audit_level=\"detailed\"                  # Log everything\n)\n\n# Agent operates within scope\nasync with client.scoped_session(scope) as session:\n    results = await session.retrieve(query)\n    # All retrievals constrained to scope\n    # All decisions logged\n    # Scope expires automatically\n```\n\nKey properties:\n\n→ Delegated: Agent acts on behalf of user\n→ Constrained: Only specified resources\n→ Time-limited: Automatic expiration\n→ Audited: Every decision logged\n\nTask-scoped authorization. Not open-ended permissions.",
+        "headline": "Agent Authorization Scopes in Code",
+        "cta": "See full documentation",
+        "link": "https://gateco.io/docs/agent-scopes?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-08-linkedin-001",
+        "hashtags": ["#AIAgents", "#Python", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Week 2: Technical - Agent scopes code"
+    },
+    {
+      "id": "2026-06-08-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-08",
+      "scheduledTime": "08:00",
+      "contentType": "thread",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "thread": [
+          "Task-scoped authorization for AI agents in Python 🧵\n\nHow to implement delegated, constrained, time-limited permissions.",
+          "1/ Define the scope:\n\nscope = AgentScope(\n  principal=\"user:alice\",\n  resources=[\"project:phoenix/*\"],\n  actions=[\"read\"],\n  expires_in=300\n)\n\nAgent acts on behalf of Alice, but only for Project Phoenix, read-only, for 5 minutes.",
+          "2/ Run within scope:\n\nasync with client.scoped_session(scope):\n  results = await session.retrieve(query)\n\nAll retrievals constrained.\nAll decisions logged.\nScope expires automatically.",
+          "3/ What you get:\n\n✓ Delegated authority (on behalf of user)\n✓ Constrained access (specified resources only)\n✓ Time-limited (automatic expiration)\n✓ Full audit trail (every decision logged)\n\nTask-scoped, not open-ended."
+        ],
+        "hashtags": ["#AIAgents", "#Python"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Week 2: Technical - Agent scopes thread"
+    },
+    {
+      "id": "2026-06-09-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-09",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Integrating Gateco with LangChain agents:\n\n```python\nfrom langchain.agents import AgentExecutor\nfrom gateco.langchain import GatecoRetrieverTool\n\n# Create permission-aware retrieval tool\nretriever_tool = GatecoRetrieverTool(\n    name=\"knowledge_search\",\n    description=\"Search internal knowledge base\",\n    gateco_client=client,\n    user_context=get_current_user\n)\n\n# Add to agent tools\nagent = AgentExecutor.from_agent_and_tools(\n    agent=llm_agent,\n    tools=[retriever_tool, ...],\n)\n\n# Agent retrieval is now permission-aware\nresult = agent.run(\"Find information about Project Phoenix\")\n```\n\nWhat happens:\n\n1. Agent decides to use knowledge_search\n2. GatecoRetrieverTool intercepts\n3. User context evaluated\n4. Only authorized chunks returned\n5. Decision logged\n\nSame LangChain patterns. Permission-aware retrieval.",
+        "headline": "Gateco + LangChain Agents",
+        "cta": "See LangChain integration guide",
+        "link": "https://gateco.io/docs/langchain?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-09-linkedin-001",
+        "hashtags": ["#LangChain", "#AIAgents", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Week 2: Technical - LangChain integration"
+    },
+    {
+      "id": "2026-06-09-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-09",
+      "scheduledTime": "12:00",
+      "contentType": "engagement",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "LangChain + Gateco = permission-aware agents\n\n1. Agent calls retrieval tool\n2. Gateco intercepts\n3. User context evaluated\n4. Only authorized chunks return\n5. Decision logged\n\nSame LangChain patterns. Added security layer.\n\nDocs: https://gateco.io/docs/langchain",
+        "hashtags": ["#LangChain", "#AIAgents"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Quick insight - LangChain"
+    },
+    {
+      "id": "2026-06-10-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-10",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Debugging agent retrieval decisions:\n\nWhen an agent returns unexpected results, the debugging workflow:\n\n1. Find the retrieval in audit logs\n2. Replay with Access Simulator\n3. Understand exactly what happened\n\nAccess Simulator for agents:\n\n→ Impersonate the agent's delegated principal\n→ Run the same query\n→ See which chunks were considered\n→ See which were filtered and why\n→ Understand the policy path\n\nDebug view shows:\n\n```\nQuery: \"Project Phoenix status\"\nPrincipal: user:alice (via agent:research-bot)\nScope: project:phoenix/*\n\nChunk phoenix-001: ALLOWED (project member)\nChunk phoenix-002: ALLOWED (project member)\nChunk hr-comp-003: DENIED (outside scope)\nChunk phoenix-004: DENIED (classification: confidential)\n\nReturned: 2 chunks\nFiltered: 2 chunks\n```\n\nNo more \"the agent did something weird.\"\n\nNow: \"here's exactly what happened and why.\"",
+        "headline": "Debugging Agent Retrieval",
+        "cta": "Try Access Simulator",
+        "link": "https://gateco.io/features/access-simulator?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-10-linkedin-001",
+        "hashtags": ["#AIAgents", "#AIGovernance", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Week 2: Technical - Debugging agents"
+    },
+    {
+      "id": "2026-06-10-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-10",
+      "scheduledTime": "17:00",
+      "contentType": "engagement",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Debugging agent retrieval:\n\n\"The agent did something weird.\"\n\nBecomes:\n\n\"Here's exactly what chunks were considered, which were filtered, and why.\"\n\nAccess Simulator turns agent behavior from mystery to observable.",
+        "hashtags": ["#AIAgents", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Quick insight - debugging"
+    },
+    {
+      "id": "2026-06-11-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-11",
+      "scheduledTime": "10:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Multi-agent systems and permission boundaries:\n\nScenario: Research agent calls analysis agent calls data agent.\n\nQuestion: What permissions does each agent have?\n\nOption 1: Permission inheritance\n→ Each agent inherits from caller\n→ Scope narrows down the chain\n→ Simplest model\n\nOption 2: Independent scopes\n→ Each agent has its own permissions\n→ Defined at deployment\n→ More control, more complexity\n\nOption 3: Task-based delegation\n→ Caller grants specific scope to callee\n→ Scope can't exceed caller's permissions\n→ Explicit trust boundaries\n\nGateco supports all three patterns.\n\nThe right choice depends on your trust model.\n\nKey principle: explicit is better than implicit.\n\nDocument your agent permission model.",
+        "headline": "Multi-Agent Permission Boundaries",
+        "cta": "See multi-agent patterns",
+        "link": "https://gateco.io/docs/multi-agent?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-11-linkedin-001",
+        "hashtags": ["#AIAgents", "#EnterpriseAI", "#AISecurityInfrastructure"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Week 2: Technical - Multi-agent permissions"
+    },
+    {
+      "id": "2026-06-15-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-15",
+      "scheduledTime": "09:00",
+      "contentType": "industry-news",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "AI agent compliance in regulated industries:\n\nNew challenge: Agents that autonomously access sensitive data.\n\nHealthcare (HIPAA):\n→ Agent accessing PHI must be logged\n→ Minimum necessary standard applies\n→ Can't exceed user's access rights\n→ Breach notification if compromised\n\nFinance (SOX, FINRA):\n→ Trading information access must be segregated\n→ Audit trail required for all data access\n→ Supervisory requirements extend to agents\n\nLegal (Ethics rules):\n→ Attorney-client privilege boundaries\n→ Conflict checks required\n→ Matter isolation mandatory\n\nCommon requirement: Prove the agent only accessed what it should have.\n\nGateco provides:\n→ Policy enforcement per industry requirement\n→ Complete audit logs\n→ Compliance reporting exports\n→ Access Simulator for audit demonstration\n\nAgent compliance isn't optional in regulated industries.",
+        "headline": "AI Agent Compliance by Industry",
+        "cta": "See compliance capabilities",
+        "link": "https://gateco.io/compliance?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-15-linkedin-001",
+        "hashtags": ["#AICompliance", "#EnterpriseAI", "#AIGovernance"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": ["healthcare", "finance", "legal"]
+      },
+      "notes": "Week 3: Compliance - Regulated industries"
+    },
+    {
+      "id": "2026-06-15-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-15",
+      "scheduledTime": "08:00",
+      "contentType": "thread",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "thread": [
+          "AI agent compliance in regulated industries 🧵\n\nNew challenge: autonomous data access with audit requirements.",
+          "1/ Healthcare (HIPAA)\n\n→ Agent PHI access must be logged\n→ Minimum necessary applies\n→ Can't exceed user's rights\n→ Breach notification extends to agents",
+          "2/ Finance (SOX, FINRA)\n\n→ Trading info segregation\n→ Full audit trail required\n→ Supervisory requirements apply\n→ Information barriers enforced",
+          "3/ Legal (Ethics rules)\n\n→ Privilege boundaries\n→ Conflict checks required\n→ Matter isolation\n→ No cross-client leakage",
+          "4/ Common requirement across all:\n\nProve the agent only accessed what it should have.\n\nAgent compliance isn't optional in regulated industries."
+        ],
+        "hashtags": ["#AICompliance", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Week 3: Compliance - Regulated industries thread"
+    },
+    {
+      "id": "2026-06-16-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-16",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "The EU AI Act and retrieval systems:\n\nUnder the EU AI Act, high-risk AI systems have specific requirements:\n\n→ Transparency: Users must know AI is being used\n→ Data governance: Training data must be documented\n→ Human oversight: Meaningful human control required\n→ Accuracy: Systems must be fit for purpose\n→ Robustness: Security and resilience requirements\n\nFor RAG systems, this means:\n\n1. Document what data the system can access\n2. Explain how retrieval decisions are made\n3. Provide human override capability\n4. Maintain audit trails\n5. Ensure unauthorized access is prevented\n\nPermission-aware retrieval directly supports:\n→ Data governance (documented access boundaries)\n→ Human oversight (policy visibility)\n→ Audit trails (every decision logged)\n→ Robustness (unauthorized access prevented)\n\nRegulatory compliance is an architecture decision.\n\nBuilding RAG in the EU? Plan for this now.",
+        "headline": "EU AI Act and RAG Systems",
+        "cta": "Learn about compliance readiness",
+        "link": "https://gateco.io/compliance/eu-ai-act?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-16-linkedin-001",
+        "hashtags": ["#EUAIAct", "#AICompliance", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": ["enterprise"]
+      },
+      "notes": "Week 3: Compliance - EU AI Act"
+    },
+    {
+      "id": "2026-06-16-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-16",
+      "scheduledTime": "12:00",
+      "contentType": "engagement",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "EU AI Act implications for RAG systems:\n\n✓ Document what data can be accessed\n✓ Explain retrieval decisions\n✓ Provide human override\n✓ Maintain audit trails\n✓ Prevent unauthorized access\n\nRegulatory compliance is an architecture decision.",
+        "hashtags": ["#EUAIAct", "#AICompliance"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Quick insight - EU AI Act"
+    },
+    {
+      "id": "2026-06-17-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-17",
+      "scheduledTime": "09:00",
+      "contentType": "industry-news",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "SOC 2 controls for AI retrieval systems:\n\nWhen auditors evaluate your AI system, they're looking at:\n\nCC6.1 - Logical access controls\n→ Can you demonstrate who can access what?\n→ Are access rights documented and reviewed?\n→ How are permissions changed?\n\nCC6.2 - System operations\n→ How is the system monitored?\n→ Are anomalies detected and responded to?\n\nCC6.3 - Change management\n→ How are policy changes approved?\n→ Is there an audit trail for changes?\n\nCC7.2 - System monitoring\n→ Are security events logged?\n→ Can you reconstruct what happened?\n\nGateco directly supports:\n→ Policy documentation (CC6.1)\n→ Real-time monitoring dashboard (CC6.2)\n→ Policy versioning with approval workflow (CC6.3)\n→ Complete audit logs with SIEM export (CC7.2)\n\nSOC 2 readiness isn't an afterthought.",
+        "headline": "SOC 2 Controls for AI Retrieval",
+        "cta": "See SOC 2 readiness guide",
+        "link": "https://gateco.io/compliance/soc2?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-17-linkedin-001",
+        "hashtags": ["#SOC2", "#AICompliance", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": ["enterprise"]
+      },
+      "notes": "Week 3: Compliance - SOC 2"
+    },
+    {
+      "id": "2026-06-17-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-17",
+      "scheduledTime": "17:00",
+      "contentType": "engagement",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "SOC 2 for AI retrieval:\n\nCC6.1 - Who can access what?\nCC6.2 - How is it monitored?\nCC6.3 - How are changes approved?\nCC7.2 - Are events logged?\n\nIf your RAG system can't answer these, you have audit findings waiting.",
+        "hashtags": ["#SOC2", "#AICompliance"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Quick insight - SOC 2"
+    },
+    {
+      "id": "2026-06-18-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-18",
+      "scheduledTime": "10:00",
+      "contentType": "engagement",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "Question for compliance and legal teams:\n\nWhat documentation are you requiring for AI systems that access internal data?\n\n→ Access control policies?\n→ Audit log retention?\n→ Data classification mapping?\n→ Incident response plans?\n\nCurious what's becoming standard practice.",
+        "headline": "AI Compliance Documentation Poll",
+        "cta": "Share your requirements",
+        "link": "",
+        "hashtags": ["#AICompliance", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Week 3: Friday engagement - Compliance poll"
+    },
+    {
+      "id": "2026-06-22-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-22",
+      "scheduledTime": "09:00",
+      "contentType": "product-highlight",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "3 months of Gateco.\n\nWhat we've learned building permission-aware retrieval:\n\n1. The problem is real\n→ Every enterprise RAG deployment hits the security question\n→ Most teams discover it late in the process\n→ Retrofitting is harder than building right\n\n2. Patterns are emerging\n→ Department isolation is the baseline\n→ Project-based access is the next layer\n→ Temporal policies (time-limited access) are growing\n\n3. Agents change everything\n→ Copilots with humans in the loop are manageable\n→ Autonomous agents need explicit scopes\n→ Multi-agent systems need clear trust boundaries\n\n4. Compliance drives adoption\n→ Regulated industries (healthcare, finance, legal) move first\n→ \"Prove it works\" is the new standard\n→ Audit logs are table stakes\n\nThank you to everyone building with Gateco.\n\nYour feedback shapes what comes next.",
+        "headline": "3 Months of Gateco - What We've Learned",
+        "cta": "Join the community",
+        "link": "https://gateco.io?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-22-linkedin-001",
+        "hashtags": ["#Gateco", "#EnterpriseAI", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "Week 4: Product - 3-month milestone"
+    },
+    {
+      "id": "2026-06-22-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-22",
+      "scheduledTime": "09:00",
+      "contentType": "announcement",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "3 months of Gateco.\n\nWhat we've learned:\n\n1. Every enterprise RAG hits the security question\n2. Department isolation → project access → temporal policies\n3. Agents need explicit scopes\n4. Compliance drives adoption\n\nThank you for building with us 🙏",
+        "hashtags": ["#Gateco"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "3-month milestone tweet"
+    },
+    {
+      "id": "2026-06-23-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-23",
+      "scheduledTime": "09:00",
+      "contentType": "product-highlight",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "Feature spotlight: Temporal Access Policies\n\nNow in Gateco: time-based access control for retrieval.\n\nUse cases:\n\n📅 Project windows\n→ Consultant can access M&A docs only during engagement\n→ Access expires automatically at end date\n\n🔒 Sensitive periods\n→ Block earnings data access during quiet period\n→ Lift restrictions after announcement\n\n⏰ Time-of-day restrictions\n→ PII access only during business hours\n→ Off-hours queries get filtered results\n\n📊 Temporary permissions\n→ Elevate access for specific investigation\n→ Audit trail shows elevation and expiration\n\nHow it works:\n\n```yaml\npolicy:\n  effect: allow\n  conditions:\n    time:\n      after: 2026-06-01\n      before: 2026-06-30\n      hours: 09:00-17:00\n      timezone: America/New_York\n```\n\nNo cron jobs. No manual revocation. No forgotten access.\n\nTime-aware policies evaluated at query time.",
+        "headline": "Temporal Access Policies",
+        "cta": "See temporal policy docs",
+        "link": "https://gateco.io/docs/temporal-policies?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-23-linkedin-001",
+        "hashtags": ["#Gateco", "#RAGSecurity", "#AIGovernance"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Week 4: Product - Temporal policies"
+    },
+    {
+      "id": "2026-06-23-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-23",
+      "scheduledTime": "12:00",
+      "contentType": "announcement",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "New: Temporal Access Policies\n\n📅 Project windows (access expires at end date)\n🔒 Sensitive periods (block during quiet period)\n⏰ Time-of-day (PII only business hours)\n📊 Temporary elevation (auto-expire)\n\nNo cron jobs. No manual revocation.\n\nTime-aware policies, evaluated at query time.",
+        "hashtags": ["#Gateco", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Temporal policies tweet"
+    },
+    {
+      "id": "2026-06-24-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-24",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "Looking back at Q2:\n\nThemes we explored:\n\n🤖 AI Agents\n→ Why agents need different authorization models\n→ Least privilege for autonomous systems\n→ Multi-agent permission boundaries\n→ Debugging agent retrieval decisions\n\n🔧 Technical Deep-Dives\n→ Agent scopes in code\n→ LangChain integration\n→ Multi-agent patterns\n\n📋 Compliance\n→ Regulated industry requirements\n→ EU AI Act implications\n→ SOC 2 controls for AI systems\n\n🚀 Product\n→ 3-month milestone\n→ Temporal access policies\n\nQ3 preview:\n→ Vector database performance optimization\n→ Custom policy functions\n→ Enterprise deployment patterns\n→ Customer success stories\n\nWhat topics should we cover? Drop suggestions in the comments.",
+        "headline": "Q2 Recap",
+        "cta": "What should we cover next?",
+        "link": "",
+        "hashtags": ["#RAGSecurity", "#EnterpriseAI", "#Gateco"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "Week 4: Q2 recap"
+    },
+    {
+      "id": "2026-06-24-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-24",
+      "scheduledTime": "17:00",
+      "contentType": "engagement",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "Q2 recap:\n\n🤖 Agent authorization deep-dives\n🔧 LangChain integration\n📋 Compliance by industry\n🚀 Temporal policies launch\n\nQ3 preview:\n→ Performance optimization\n→ Custom policy functions\n→ Customer stories\n\nWhat should we cover?",
+        "hashtags": ["#Gateco"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "Q2 recap tweet"
+    },
+    {
+      "id": "2026-06-25-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-25",
+      "scheduledTime": "10:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "The next 6 months of enterprise AI:\n\nPredictions based on what we're seeing:\n\n1. Agent proliferation\n→ From single copilots to multi-agent systems\n→ Agentic workflows become standard\n→ Permission complexity increases exponentially\n\n2. Compliance catches up\n→ Regulators issue AI-specific guidance\n→ \"Show me your AI audit\" becomes routine\n→ Retrofitting security becomes expensive\n\n3. Security as differentiator\n→ \"How do you handle AI permissions?\" in every RFP\n→ Customers choose vendors based on AI governance\n→ Security posture affects enterprise deals\n\n4. Standardization begins\n→ Best practices emerge for RAG security\n→ Industry-specific frameworks develop\n→ Permission-aware retrieval becomes table stakes\n\nOrganizations building AI systems today:\n\nPlan for security now. The cost of retrofitting will only grow.",
+        "headline": "Enterprise AI: The Next 6 Months",
+        "cta": "Build secure from the start",
+        "link": "https://gateco.io?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-25-linkedin-001",
+        "hashtags": ["#EnterpriseAI", "#AIGovernance", "#RAGSecurity"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Week 4: Forward-looking thought leadership"
+    },
+    {
+      "id": "2026-06-29-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-29",
+      "scheduledTime": "09:00",
+      "contentType": "product-highlight",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "H1 2026 at Gateco: By the numbers.\n\n📊 Platform Stats:\n→ 25M+ secured retrievals processed\n→ 500+ organizations using Gateco\n→ P99 latency: 8ms policy evaluation\n→ 99.95% uptime\n\n🚀 Shipped:\n→ 12 vector DB connectors\n→ Agent authorization scopes\n→ Temporal access policies\n→ Policy templates library\n→ SIEM integrations (Splunk, Datadog, PagerDuty)\n\n🏢 Customer Milestones:\n→ First Fortune 500 deployments\n→ Healthcare and finance production launches\n→ Enterprise annual contracts signed\n\n📚 Community:\n→ 50+ documentation pages\n→ 10+ integration guides\n→ Active Discord community\n\nH2 roadmap highlights:\n→ Custom policy functions\n→ Policy impact analysis\n→ Advanced debugging tools\n→ More vector DB connectors\n\nThank you for an incredible first half.\n\nOnward to H2.",
+        "headline": "H1 2026 Recap",
+        "cta": "Join us for H2",
+        "link": "https://gateco.io?utm_source=linkedin&utm_medium=social&utm_campaign=june-2026&utm_content=2026-06-29-linkedin-001",
+        "hashtags": ["#Gateco", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "Week 4/5: H1 recap (end of month)"
+    },
+    {
+      "id": "2026-06-29-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-29",
+      "scheduledTime": "09:00",
+      "contentType": "announcement",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "H1 2026 at Gateco:\n\n📊 25M+ secured retrievals\n📊 500+ organizations\n📊 99.95% uptime\n\n🚀 Agent scopes, temporal policies, 12 connectors\n\n🏢 Fortune 500 deployments, healthcare + finance production\n\nThank you for an incredible first half 🙏",
+        "hashtags": ["#Gateco"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "H1 recap tweet"
+    },
+    {
+      "id": "2026-06-30-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-06-30",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "July preview: What's coming.\n\n🔧 Technical content:\n→ Performance optimization deep-dives\n→ Custom policy function patterns\n→ Advanced vector DB configurations\n\n📋 Compliance:\n→ Industry-specific deployment guides\n→ Audit preparation checklists\n→ Regulatory update analysis\n\n🏢 Customer stories:\n→ Healthcare deployment case study\n→ Financial services use case\n→ Legal industry implementation\n\n🚀 Product:\n→ New feature launches\n→ Platform improvements\n→ Integration expansions\n\nQuestions you want answered?\nTopics you want covered?\n\nDrop them in the comments. Your feedback shapes our roadmap.\n\nSee you in July.",
+        "headline": "July Preview",
+        "cta": "What should we cover?",
+        "link": "",
+        "hashtags": ["#RAGSecurity", "#EnterpriseAI", "#Gateco"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "Week 5: July preview (final June post)"
+    },
+    {
+      "id": "2026-06-30-twitter-001",
+      "platform": "twitter",
+      "scheduledDate": "2026-06-30",
+      "scheduledTime": "17:00",
+      "contentType": "engagement",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "July preview:\n\n🔧 Performance deep-dives\n📋 Industry deployment guides\n🏢 Customer case studies\n🚀 New feature launches\n\nWhat topics should we cover?\n\nDrop suggestions 👇",
+        "hashtags": ["#Gateco"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "July preview tweet"
+    }
+  ]
+}

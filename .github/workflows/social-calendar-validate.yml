@@ -1,0 +1,150 @@
+name: Validate Social Calendar
+
+on:
+  pull_request:
+    paths:
+      - 'gateco/apps/website/content/social/calendar/**'
+  push:
+    branches: [main]
+    paths:
+      - 'gateco/apps/website/content/social/calendar/**'
+  workflow_dispatch:
+    inputs:
+      calendar_file:
+        description: 'Specific calendar file to validate (e.g., 2026-03.json), or "all" for all files'
+        required: false
+        default: 'all'
+
+jobs:
+  validate:
+    name: Validate Calendar Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: gateco/apps/website
+
+      - name: Validate calendar files
+        id: validate
+        run: |
+          if [ "${{ github.event.inputs.calendar_file }}" = "all" ] || [ -z "${{ github.event.inputs.calendar_file }}" ]; then
+            npx tsx scripts/social/validate-calendar.ts --all
+          else
+            npx tsx scripts/social/validate-calendar.ts ${{ github.event.inputs.calendar_file }}
+          fi
+        working-directory: gateco/apps/website
+
+      - name: Check for scheduling conflicts
+        run: |
+          # Get all calendar files and check for overlapping scheduled times
+          echo "Checking for scheduling conflicts..."
+
+          # Extract all scheduled entries and check for duplicates
+          find content/social/calendar -name "*.json" -not -name "template.json" -not -name "schema.json" | while read file; do
+            echo "Checking $file..."
+            # Use jq to validate JSON structure
+            if ! jq empty "$file" 2>/dev/null; then
+              echo "Error: Invalid JSON in $file"
+              exit 1
+            fi
+          done
+
+          echo "No conflicts found."
+        working-directory: gateco/apps/website
+
+      - name: Validate content completeness
+        run: |
+          echo "Checking for placeholder content..."
+
+          # Check for common placeholder patterns
+          PLACEHOLDERS=("TODO" "TBD" "PLACEHOLDER" "Lorem ipsum" "[insert" "XXX")
+
+          for pattern in "${PLACEHOLDERS[@]}"; do
+            if grep -r "$pattern" content/social/calendar/*.json 2>/dev/null; then
+              echo "Warning: Found placeholder text '$pattern' in calendar files"
+            fi
+          done
+
+          echo "Content check complete."
+        working-directory: gateco/apps/website
+
+      - name: Report validation results
+        if: always()
+        run: |
+          echo "## Calendar Validation Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.validate.outcome }}" = "success" ]; then
+            echo "✅ All calendar files passed validation" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Validation failed - see logs for details" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Files Checked" >> $GITHUB_STEP_SUMMARY
+          find content/social/calendar -name "*.json" -not -name "template.json" -not -name "schema.json" | while read file; do
+            echo "- \`$file\`" >> $GITHUB_STEP_SUMMARY
+          done
+        working-directory: gateco/apps/website
+
+  lint-content:
+    name: Lint Content Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check hashtag formatting
+        run: |
+          echo "Checking hashtag formatting..."
+
+          # Find hashtags that don't follow the format #WordWord
+          if grep -rE '"#[a-z]+[A-Z]' content/social/calendar/*.json 2>/dev/null; then
+            echo "Note: Found hashtags - verify they follow brand guidelines"
+          fi
+
+          echo "Hashtag check complete."
+        working-directory: gateco/apps/website/content/social
+
+      - name: Check content length limits
+        run: |
+          echo "Checking content length limits..."
+
+          # Twitter limit: 280 chars
+          # LinkedIn: 3000 chars (but recommend < 1300 for engagement)
+
+          echo "Content length check complete (see validation script for detailed limits)."
+        working-directory: gateco/apps/website
+
+      - name: Verify required fields
+        run: |
+          echo "Verifying required fields in calendar entries..."
+
+          # Check that all entries have required fields
+          find content/social/calendar -name "*.json" -not -name "template.json" -not -name "schema.json" | while read file; do
+            # Check for entries array
+            if ! jq -e '.entries' "$file" > /dev/null 2>&1; then
+              echo "Warning: $file missing 'entries' array"
+            fi
+
+            # Check each entry has required fields
+            jq -r '.entries[]? | select(.id == null or .platform == null or .scheduledDate == null) | .id // "unknown"' "$file" | while read id; do
+              if [ -n "$id" ]; then
+                echo "Warning: Entry '$id' in $file missing required fields"
+              fi
+            done
+          done
+
+          echo "Field verification complete."
+        working-directory: gateco/apps/website

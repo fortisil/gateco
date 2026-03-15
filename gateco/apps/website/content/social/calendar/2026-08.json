@@ -1,0 +1,263 @@
+{
+  "month": 8,
+  "year": 2026,
+  "entries": [
+    {
+      "id": "2026-08-04-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-04",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "AI Security Maturity Model\n\nWhere does your organization fall?\n\nLevel 1: NONE\n- RAG deployed without security consideration\n- No audit logging of AI queries\n- \"We trust our employees\"\n\nLevel 2: BASIC\n- Separate indexes for sensitive vs. non-sensitive\n- Manual access control lists\n- Limited logging\n\nLevel 3: DEVELOPING\n- Metadata filters on retrieval\n- Role-based index access\n- Query logging with user attribution\n\nLevel 4: MATURE\n- Policy-based access control (RBAC/ABAC)\n- Runtime permission evaluation\n- Full audit trail\n- Automated compliance reporting\n\nLevel 5: OPTIMIZING\n- Continuous policy refinement\n- Anomaly detection\n- Integration with enterprise IAM\n\nMost organizations are at Level 1 or 2.\nAuditors expect Level 4.\n\nWhere are you? Where do you need to be?",
+        "headline": "AI Security Maturity Model",
+        "hashtags": ["#AIGovernance", "#EnterpriseAI", "#AICompliance"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Security Deep-Dive series - Maturity Model"
+    },
+    {
+      "id": "2026-08-05-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-05",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Testing Permission Policies: A Framework\n\nPermission policies are code. Test them like code.\n\nLAYER 1: UNIT TESTS\nTest individual rules in isolation.\n\nLAYER 2: INTEGRATION TESTS\nTest rule combinations.\n\nLAYER 3: SCENARIO TESTS\nTest real-world user journeys.\n\nLAYER 4: REGRESSION TESTS\nEvery production incident becomes a test.\n\nLAYER 5: CHAOS TESTS\nWhat happens with bad data?\n\nCoverage target: 100% for DENY paths.\n\nYou can't afford false positives in security.\n\nFull testing framework: https://gateco.io/docs/testing",
+        "headline": "Policy Testing Framework",
+        "cta": "See testing documentation",
+        "link": "https://gateco.io/docs/testing",
+        "hashtags": ["#Testing", "#PolicyEngine", "#QualityAssurance"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Developer Education series - Testing"
+    },
+    {
+      "id": "2026-08-06-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-06",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "AI Security: Lessons from Cloud Security History\n\nIn 2010, security teams said \"we'll never put data in the cloud.\"\nIn 2015, they said \"okay, but we need to secure it differently.\"\nIn 2020, cloud security was a $5B market.\n\nWe're at the 2015 moment for AI.\n\nLessons from cloud security:\n\n1. DENIAL IS TEMPORARY\nBusiness value wins. Enable safe adoption.\n\n2. TRADITIONAL TOOLS DON'T TRANSLATE\nFirewalls didn't secure cloud. IAM doesn't secure AI retrieval.\n\n3. VISIBILITY COMES FIRST\nYou can't secure what you can't see.\n\n4. SHARED RESPONSIBILITY MATTERS\nKnow where your responsibility starts.\n\n5. COMPLIANCE DRIVES ADOPTION\nRegulation will force investment.\n\n6. SPECIALISTS EMERGE\nAI security will become a distinct discipline.\n\nThe timeline is compressed. Cloud took 10 years. AI will take 3.",
+        "headline": "Lessons from Cloud Security",
+        "hashtags": ["#AISecurityInfrastructure", "#CloudSecurity", "#SecurityEvolution"]
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": "Thought Leadership series - Cloud parallel"
+    },
+    {
+      "id": "2026-08-11-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-11",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "The most underrated AI security feature: explanations.\n\nWhen a query is blocked, users want to know why.\n\n\"Access denied\" = frustration\n\"Access denied: Document requires project membership\" = understanding\n\nGood denial explanations:\n→ Reduce support tickets\n→ Help users self-serve appropriate access\n→ Expose policy misconfigurations\n→ Create better audit trails\n\nThe pattern we recommend:\n\n1. Tell users THAT access was denied\n2. Tell users WHY (policy rule that triggered)\n3. Tell users WHAT they can do (request access, contact admin)\n4. Don't reveal WHAT was denied (confirms existence)\n\nSecurity doesn't have to mean opacity.\nTransparency builds trust.",
+        "headline": "Denial Explanations",
+        "hashtags": ["#UserExperience", "#AISecurityInfrastructure", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "platform-engineer",
+        "industry": []
+      },
+      "notes": "UX of security"
+    },
+    {
+      "id": "2026-08-12-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-12",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Vector DB Agnostic by Design: Why it matters\n\nWhen we started building Gateco, we had a choice:\n\nOption A: Build for one vector DB, optimize deeply\nOption B: Build adapters, support many\n\nWe chose B. Here's why:\n\nEnterprise AI teams don't standardize on vector DBs.\n\nSome use Pinecone because it was first.\nSome use pgvector because they already run Postgres.\nSome use Weaviate for hybrid search.\nSome use internal solutions we've never heard of.\n\nA permission layer shouldn't dictate infrastructure.\n\nHow we did it:\nAdapter pattern. Each vector DB gets a thin adapter.\n\nCurrent adapters:\n✅ Pinecone\n✅ pgvector\n✅ Weaviate\n✅ Chroma\n✅ Qdrant\n✅ OpenSearch\n✅ Milvus\n\nAdding a new adapter: ~200 lines, 1-2 days.\n\nFor enterprise sales, \"works with your existing vector DB\" closes deals.",
+        "headline": "Vector DB Agnostic",
+        "cta": "See integrations",
+        "link": "https://gateco.io/docs/integrations",
+        "hashtags": ["#VectorDatabase", "#RAG", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "platform-engineer",
+        "industry": []
+      },
+      "notes": "Tech Stack series - Vector DB agnostic"
+    },
+    {
+      "id": "2026-08-13-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-13",
+      "scheduledTime": "09:00",
+      "contentType": "industry-news",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "HIPAA and AI: What healthcare organizations need to know.\n\nHIPAA doesn't exempt AI systems from compliance.\n\nIf your AI can access PHI, you need:\n\n1. ACCESS CONTROLS\n\"Minimum necessary\" applies to AI queries too.\nNot everyone should see all patient data.\n\n2. AUDIT TRAILS\nWho accessed what PHI through AI?\nYou need logs. Detailed logs.\n\n3. BREACH NOTIFICATION\nIf AI exposes PHI inappropriately, it's a breach.\nSame notification requirements apply.\n\n4. BUSINESS ASSOCIATE AGREEMENTS\nYour AI vendor may be a business associate.\nContracts need to reflect this.\n\nThe good news: These requirements are solvable.\nPermission-aware retrieval + audit logging = HIPAA-ready AI.\n\nThe risk of non-compliance is too high to ignore.",
+        "headline": "HIPAA and AI",
+        "hashtags": ["#HIPAA", "#HealthcareAI", "#AICompliance"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": ["healthcare"]
+      },
+      "notes": "Compliance series - HIPAA"
+    },
+    {
+      "id": "2026-08-18-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-18",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "The Hidden Cost of Unsecured RAG\n\nThe question isn't whether you'll have an AI data incident.\nIt's how much it will cost.\n\nDIRECT COSTS:\n1. Incident Response: $150K - $500K\n2. Regulatory Fines: Up to 4% of revenue (GDPR)\n3. Legal Exposure: Employee and customer claims\n\nINDIRECT COSTS:\n4. Lost Deals: \"How do you secure AI?\" No answer = no deal\n5. Audit Failures: Remediation under pressure = expensive\n6. Reputation: Trust doesn't return quickly\n\nThe cost of securing RAG: Predictable, manageable.\nThe cost of not securing: Unbounded.\n\nThis isn't fear-mongering. It's risk management.\n\nWhat's your current exposure?",
+        "headline": "Hidden Cost of Insecurity",
+        "hashtags": ["#RiskManagement", "#EnterpriseAI", "#AICompliance"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": []
+      },
+      "notes": "Security Deep-Dive series - Costs"
+    },
+    {
+      "id": "2026-08-19-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-19",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "Migration Guide: Adding Security to Existing RAG\n\nYou have RAG in production. How do you add security without breaking everything?\n\nPHASE 1: AUDIT (Week 1-2)\nLog everything, enforce nothing.\nLearn: What queries happen? What data returns? Who are the users?\n\nPHASE 2: SHADOW (Week 3-4)\nEvaluate policies, but don't enforce.\nLearn: What WOULD be blocked? Where are the gaps?\n\nPHASE 3: SOFT ENFORCE (Week 5-6)\nEnforce for new sessions only.\nMonitor: Support tickets, user complaints, false positives.\n\nPHASE 4: FULL ENFORCE (Week 7+)\nProduction enforcement.\nHave ready: Rollback plan, escalation paths, monitoring.\n\nTotal timeline: 6-8 weeks for mid-size deployment.\n\nWorst approach: Big-bang enforcement on Day 1.\nBest approach: Gradual, data-driven rollout.",
+        "headline": "Migration Guide",
+        "cta": "See migration documentation",
+        "link": "https://gateco.io/docs/migration",
+        "hashtags": ["#Migration", "#RAGSecurity", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "platform-engineer",
+        "industry": []
+      },
+      "notes": "Developer Education series - Migration"
+    },
+    {
+      "id": "2026-08-20-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-20",
+      "scheduledTime": "09:00",
+      "contentType": "industry-news",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "Legal industry AI adoption is accelerating.\n\nBut so are the risks.\n\nWhat law firms are deploying:\n→ Contract analysis assistants\n→ Case research AI\n→ Document review automation\n→ Internal knowledge bases\n\nWhat's going wrong:\n→ Junior associates accessing partner information\n→ Cross-matter data leakage\n→ Privileged communications exposed\n→ Client confidentiality breaches\n\nWhat's needed:\n→ Matter-level isolation\n→ Privilege protection\n→ Role-based access (partner, associate, staff)\n→ Full audit trails for compliance\n\nThe firms getting this right are winning.\nThe firms that aren't are creating liability.",
+        "headline": "Legal Industry AI",
+        "hashtags": ["#LegalTech", "#AICompliance", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": ["legal"]
+      },
+      "notes": "Legal industry focus"
+    },
+    {
+      "id": "2026-08-25-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-25",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "The most common AI security architecture mistake:\n\nPutting security AFTER retrieval instead of DURING retrieval.\n\nBad pattern:\n1. Query vector DB\n2. Get all results\n3. Try to filter in application code\n4. Send filtered results to LLM\n\nProblems:\n→ All data hits application memory\n→ Filter logic is scattered\n→ No audit trail at retrieval layer\n→ Easy to forget filtering in new code paths\n\nGood pattern:\n1. Query with user context\n2. Permission check on each result\n3. Only authorized results returned\n4. Send to LLM\n\nThe difference:\nBad: Data is retrieved, then filtered\nGood: Only authorized data is ever retrieved\n\nSecurity should be a layer, not an afterthought.",
+        "headline": "Architecture Mistake",
+        "hashtags": ["#Architecture", "#RAGSecurity", "#AISecurityInfrastructure"]
+      },
+      "targeting": {
+        "persona": "ai-ml-lead",
+        "industry": []
+      },
+      "notes": "Architecture pattern"
+    },
+    {
+      "id": "2026-08-26-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-26",
+      "scheduledTime": "09:00",
+      "contentType": "technical-education",
+      "pillar": "technical-education",
+      "status": "draft",
+      "content": {
+        "text": "How Gateco evaluates 10,000 permissions per second\n\nOur policy engine is the core of Gateco. Here's how it works:\n\nCHALLENGES:\n→ Complex policies (RBAC + ABAC + ReBAC)\n→ Sub-millisecond latency requirement\n→ 100% consistency (no eventual consistency for security)\n\nARCHITECTURE:\n\n1. Policy Compilation\nPolicies compiled to optimized decision trees. No interpretation at runtime.\n\n2. Identity Resolution\nUser context resolved once per request, cached for session.\n\n3. Parallel Evaluation\nTop-K chunks evaluated in parallel. Async Python + connection pooling.\n\n4. Early Exit\nClear allow/deny? Skip expensive lookups.\n\n5. Decision Caching\nSame user + resource = cached decision.\n\nRESULTS:\nP50: 2ms | P99: 8ms | P999: 15ms\nAt 10K requests/second sustained.\n\nSecurity evaluation should be fast, deterministic, and auditable.",
+        "headline": "Policy Engine Architecture",
+        "cta": "See architecture docs",
+        "link": "https://gateco.io/docs/architecture",
+        "hashtags": ["#PolicyEngine", "#RBAC", "#ABAC"]
+      },
+      "targeting": {
+        "persona": "platform-engineer",
+        "industry": []
+      },
+      "notes": "Tech Stack series - Policy Engine"
+    },
+    {
+      "id": "2026-08-27-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-27",
+      "scheduledTime": "09:00",
+      "contentType": "industry-news",
+      "pillar": "industry-compliance",
+      "status": "draft",
+      "content": {
+        "text": "SOC 2 Type II and AI: The new requirements.\n\nSOC 2 auditors are evolving their approach to AI systems.\n\nWhat they're asking:\n\n1. ACCESS CONTROLS (CC6.1)\n\"How do you ensure AI systems only access authorized data?\"\nExpected: Policy-based access control, not just network segmentation.\n\n2. SYSTEM OPERATIONS (CC7.2)\n\"How do you monitor AI system access?\"\nExpected: Real-time logging of AI queries and responses.\n\n3. CHANGE MANAGEMENT (CC8.1)\n\"How do you manage changes to AI access policies?\"\nExpected: Version control, testing, rollback capabilities.\n\n4. RISK ASSESSMENT (CC3.2)\n\"How do you assess risks from AI data access?\"\nExpected: Documented risk assessment including AI vectors.\n\nIf your SOC 2 report doesn't address AI, it's incomplete.\n\nAuditors are paying attention. Are you?",
+        "headline": "SOC 2 and AI",
+        "hashtags": ["#SOC2", "#AICompliance", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "executive",
+        "industry": ["enterprise", "saas"]
+      },
+      "notes": "Compliance series - SOC 2"
+    },
+    {
+      "id": "2026-08-31-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-08-31",
+      "scheduledTime": "10:00",
+      "contentType": "thought-leadership",
+      "pillar": "product-company",
+      "status": "draft",
+      "content": {
+        "text": "August recap: Building secure AI infrastructure.\n\nWHAT WE SHIPPED:\n→ Okta SCIM integration\n→ Azure AD group sync\n→ Policy export/import for GitOps\n→ Denial reason explanations in API\n\nWHAT WE LEARNED:\n→ Migration from unsecured to secured RAG takes 6-8 weeks with proper planning\n→ Shadow mode before enforcement prevents 90% of issues\n→ Audit logs reveal access patterns teams didn't know existed\n\nWHAT'S NEXT:\n→ Google Workspace directory sync\n→ Policy linting and validation\n→ Advanced anomaly detection\n\nThanks to our growing community of security-minded AI builders.\n\nStart free: https://gateco.io",
+        "headline": "August Recap",
+        "cta": "Start free",
+        "link": "https://gateco.io",
+        "hashtags": ["#Gateco", "#EnterpriseAI"]
+      },
+      "targeting": {
+        "persona": "general",
+        "industry": []
+      },
+      "notes": "End of month recap"
+    }
+  ]
+}

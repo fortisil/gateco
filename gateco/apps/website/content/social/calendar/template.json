@@ -1,0 +1,27 @@
+{
+  "month": 3,
+  "year": 2026,
+  "entries": [
+    {
+      "id": "2026-03-01-linkedin-001",
+      "platform": "linkedin",
+      "scheduledDate": "2026-03-01",
+      "scheduledTime": "09:00",
+      "contentType": "thought-leadership",
+      "pillar": "security-gap",
+      "status": "draft",
+      "content": {
+        "text": "",
+        "headline": "",
+        "cta": "",
+        "link": "",
+        "hashtags": []
+      },
+      "targeting": {
+        "persona": "security-architect",
+        "industry": []
+      },
+      "notes": ""
+    }
+  ]
+}

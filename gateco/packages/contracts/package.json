@@ -1,0 +1,10 @@
+{
+  "name": "@gateco/contracts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gateco API contracts (OpenAPI)",
+  "scripts": {
+    "generate": "python scripts/export-openapi.py",
+    "validate": "npx @redocly/cli lint openapi.json"
+  }
+}

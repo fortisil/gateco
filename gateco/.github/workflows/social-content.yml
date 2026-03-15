@@ -1,0 +1,137 @@
+name: Social Content Validation
+
+on:
+  pull_request:
+    paths:
+      - 'apps/website/content/social/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/website/content/social/**'
+  workflow_dispatch:
+    inputs:
+      analyze:
+        description: 'Run calendar analysis'
+        type: boolean
+        default: false
+
+jobs:
+  validate-calendars:
+    name: Validate Calendar Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: apps/website/content/social/scripts
+        run: npm install
+
+      - name: Validate all calendar files
+        working-directory: apps/website/content/social/scripts
+        run: npx tsx validate-calendar.ts --all
+
+      - name: Run calendar analysis
+        if: github.event.inputs.analyze == 'true' || github.event_name == 'push'
+        working-directory: apps/website/content/social/scripts
+        run: npx tsx analyze-calendar.ts
+
+  lint-content:
+    name: Lint Content Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for prohibited words
+        run: |
+          echo "Checking for prohibited marketing words..."
+          PROHIBITED="revolutionary|game-changing|disruptive|best-in-class|synergy|leverage|seamless"
+
+          # Check LinkedIn posts
+          if grep -rEi "$PROHIBITED" apps/website/content/social/posts/linkedin/*.md; then
+            echo "::warning::Found prohibited marketing words in LinkedIn posts"
+          fi
+
+          # Check Twitter posts
+          if grep -rEi "$PROHIBITED" apps/website/content/social/posts/twitter/*.md; then
+            echo "::warning::Found prohibited marketing words in Twitter posts"
+          fi
+
+          echo "Content check complete"
+
+      - name: Check hashtag format
+        run: |
+          echo "Checking hashtag format..."
+
+          # Check that hashtags start with #
+          if grep -rE '"hashtags":\s*\[' apps/website/content/social/calendar/*.json | grep -v '#'; then
+            echo "::warning::Found hashtags without # prefix"
+          fi
+
+          echo "Hashtag check complete"
+
+  check-calendar-coverage:
+    name: Check Calendar Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for upcoming months
+        run: |
+          CURRENT_MONTH=$(date +%Y-%m)
+          NEXT_MONTH=$(date -d "+1 month" +%Y-%m)
+          CALENDAR_DIR="apps/website/content/social/calendar"
+
+          echo "Checking calendar coverage..."
+
+          if [ ! -f "$CALENDAR_DIR/$CURRENT_MONTH.json" ]; then
+            echo "::warning::Missing calendar for current month: $CURRENT_MONTH"
+          else
+            echo "Current month calendar exists: $CURRENT_MONTH"
+          fi
+
+          if [ ! -f "$CALENDAR_DIR/$NEXT_MONTH.json" ]; then
+            echo "::warning::Missing calendar for next month: $NEXT_MONTH"
+          else
+            echo "Next month calendar exists: $NEXT_MONTH"
+          fi
+
+  notify-weekly-reminder:
+    name: Weekly Content Reminder
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check this week's content
+        run: |
+          TODAY=$(date +%Y-%m-%d)
+          WEEK_END=$(date -d "+7 days" +%Y-%m-%d)
+          MONTH=$(date +%Y-%m)
+          CALENDAR_FILE="apps/website/content/social/calendar/$MONTH.json"
+
+          if [ -f "$CALENDAR_FILE" ]; then
+            echo "Content scheduled for this week:"
+            cat "$CALENDAR_FILE" | jq --arg today "$TODAY" --arg end "$WEEK_END" \
+              '.entries[] | select(.scheduledDate >= $today and .scheduledDate <= $end) | "\(.scheduledDate) - \(.platform) - \(.content.headline // .contentType)"'
+          else
+            echo "No calendar file found for $MONTH"
+          fi
+
+# Scheduled job for daily reminders (commented out, enable when ready)
+# on:
+#   schedule:
+#     - cron: '0 13 * * 1-5'  # 9 AM ET, weekdays

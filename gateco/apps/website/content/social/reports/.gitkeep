@@ -1,0 +1,27 @@
+# Social Media Reports Directory
+
+This directory contains weekly and monthly social media performance reports.
+
+## Structure
+
+```
+reports/
+├── weekly/
+│   ├── 2026-W10.md
+│   ├── 2026-W11.md
+│   └── ...
+└── monthly/
+    ├── 2026-03.md
+    ├── 2026-04.md
+    └── ...
+```
+
+## Report Generation
+
+Weekly reports are generated every Monday via GitHub Actions.
+See `.github/workflows/social-report.yml` for automation.
+
+## Manual Entry
+
+Until platform API integration is complete, metrics should be entered manually
+following the templates in `KPI_FRAMEWORK.md`.
