@@ -22,7 +22,7 @@ export default function Header() {
       <nav className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/brand/logo.png" alt="Gateco" width={32} height={32} className="h-8 w-auto" />
+          <Image src="/brand/logo.png" alt="Gateco" width={620} height={282} className="h-9 w-auto sm:h-10" />
         </Link>
 
         {/* Desktop Navigation */}

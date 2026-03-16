@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 
 const FOOTER_SECTIONS = [
@@ -31,6 +32,26 @@ const FOOTER_SECTIONS = [
  * Site footer with multi-column link sections and copyright
  */
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  async function handleSubscribe(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: '', email, message: 'Newsletter subscription', source: 'newsletter' }),
+      });
+      setStatus(res.ok ? 'success' : 'error');
+      if (res.ok) setEmail('');
+    } catch {
+      setStatus('error');
+    }
+  }
+
   return (
     <footer className="border-t border-border bg-muted/50">
       <div className="container py-12">
@@ -44,7 +65,7 @@ export default function Footer() {
               Permission-Aware Retrieval for AI Systems
             </p>
             {/* Newsletter */}
-            <form className="mt-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="mt-6" onSubmit={handleSubscribe}>
               <label htmlFor="newsletter-email" className="text-sm font-medium text-foreground">
                 Stay updated
               </label>
@@ -52,16 +73,26 @@ export default function Footer() {
                 <input
                   id="newsletter-email"
                   type="email"
+                  required
                   placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-600"
                 />
                 <button
                   type="submit"
-                  className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-500 transition-colors"
+                  disabled={status === 'loading'}
+                  className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-500 transition-colors disabled:opacity-50"
                 >
-                  Subscribe
+                  {status === 'loading' ? 'Sending...' : 'Subscribe'}
                 </button>
               </div>
+              {status === 'success' && (
+                <p className="mt-2 text-xs text-green-600">Thanks for subscribing!</p>
+              )}
+              {status === 'error' && (
+                <p className="mt-2 text-xs text-red-600">Something went wrong. Please try again.</p>
+              )}
             </form>
           </div>
 

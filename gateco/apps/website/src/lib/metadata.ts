@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://gateco.com';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://gateco.ai';
 
 /**
  * Build page-level metadata with site-wide defaults

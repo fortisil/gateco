@@ -39,7 +39,7 @@ export default function TermsPage() {
               <section>
                 <h2 className="text-xl font-semibold text-foreground">3. Accounts and Access</h2>
                 <p className="mt-3">
-                  You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account. You must provide accurate registration information and promptly update it if it changes. Notify us immediately of any unauthorized access at security@gateco.com.
+                  You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account. You must provide accurate registration information and promptly update it if it changes. Notify us immediately of any unauthorized access at security@gateco.ai.
                 </p>
               </section>
 
@@ -81,7 +81,7 @@ export default function TermsPage() {
               <section>
                 <h2 className="text-xl font-semibold text-foreground">9. Contact</h2>
                 <p className="mt-3">
-                  For questions about these terms, contact us at legal@gateco.com or write to Gateco, Inc.
+                  For questions about these terms, contact us at legal@gateco.ai or write to Gateco, Inc.
                 </p>
               </section>
             </div>

@@ -48,9 +48,9 @@ def upgrade():
     )
 
     # Add new audit event types
-    op.execute("ALTER TYPE auditeventtype ADD VALUE IF NOT EXISTS 'document_ingested'")
-    op.execute("ALTER TYPE auditeventtype ADD VALUE IF NOT EXISTS 'batch_ingested'")
-    op.execute("ALTER TYPE auditeventtype ADD VALUE IF NOT EXISTS 'ingestion_failed'")
+    op.execute("ALTER TYPE audit_event_type ADD VALUE IF NOT EXISTS 'document_ingested'")
+    op.execute("ALTER TYPE audit_event_type ADD VALUE IF NOT EXISTS 'batch_ingested'")
+    op.execute("ALTER TYPE audit_event_type ADD VALUE IF NOT EXISTS 'ingestion_failed'")
 
 
 def downgrade():

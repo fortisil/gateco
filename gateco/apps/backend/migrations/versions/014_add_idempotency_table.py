@@ -46,7 +46,7 @@ def upgrade():
     op.create_index("ix_idempotency_expires", "idempotency_records", ["expires_at"])
 
     # Add retroactive_registered audit event type
-    op.execute("ALTER TYPE auditeventtype ADD VALUE IF NOT EXISTS 'retroactive_registered'")
+    op.execute("ALTER TYPE audit_event_type ADD VALUE IF NOT EXISTS 'retroactive_registered'")
 
 
 def downgrade():

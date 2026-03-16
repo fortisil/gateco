@@ -7,7 +7,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://gateco.com';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://gateco.ai';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

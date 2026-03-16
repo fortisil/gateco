@@ -60,10 +60,15 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        marquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(calc(-100% - var(--gap)))' },
+        },
       },
       animation: {
         fadeIn: 'fadeIn 0.5s ease-out',
         slideUp: 'slideUp 0.5s ease-out',
+        marquee: 'marquee var(--duration) linear infinite',
       },
     },
   },

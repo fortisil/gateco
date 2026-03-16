@@ -4,15 +4,42 @@ FastAPI backend application with async SQLAlchemy, PostgreSQL, and pgvector.
 
 ## Development
 
+### Setup (first time)
+
 ```bash
+# Create virtual environment
+python3 -m venv venv
+
+# Activate it
+source venv/bin/activate
+
 # Install dependencies
 pip install -r requirements.txt
 
-# Run development server
+# Install the backend package in editable mode (makes `gateco` importable)
+pip install -e .
+
+# Copy environment file and edit as needed
+cp .env.example .env
+
+# Run database migrations (requires PostgreSQL running)
+alembic upgrade head
+```
+
+### Run the server
+
+```bash
+source venv/bin/activate
 uvicorn src.gateco.main:app --reload --port 8000
 
 # Or via Makefile
 make dev
+```
+
+If port 8000 is already in use, kill the existing process first:
+
+```bash
+lsof -ti :8000 | xargs kill -9
 ```
 
 ## Scripts (Makefile)
@@ -64,6 +91,7 @@ Once running, API docs are available at:
 ## Testing
 
 ```bash
+source venv/bin/activate
 pytest                       # Run all tests
 pytest -v                    # Verbose
 pytest --cov=src/gateco      # With coverage

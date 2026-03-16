@@ -60,7 +60,7 @@ export default function PrivacyPage() {
               <section>
                 <h2 className="text-xl font-semibold text-foreground">6. Your Rights</h2>
                 <p className="mt-3">
-                  You have the right to access, correct, or delete your personal data. You can export your data at any time through your account settings. To exercise these rights or for any privacy-related inquiries, contact us at privacy@gateco.com. We will respond to requests within 30 days.
+                  You have the right to access, correct, or delete your personal data. You can export your data at any time through your account settings. To exercise these rights or for any privacy-related inquiries, contact us at privacy@gateco.ai. We will respond to requests within 30 days.
                 </p>
               </section>
 
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
               <section>
                 <h2 className="text-xl font-semibold text-foreground">8. Contact</h2>
                 <p className="mt-3">
-                  For questions about this privacy policy or our data practices, contact us at privacy@gateco.com or write to our Data Protection Officer at Gateco, Inc.
+                  For questions about this privacy policy or our data practices, contact us at privacy@gateco.ai or write to our Data Protection Officer at Gateco, Inc.
                 </p>
               </section>
             </div>

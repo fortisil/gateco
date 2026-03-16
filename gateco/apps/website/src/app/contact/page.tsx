@@ -37,7 +37,7 @@ export default function ContactPage() {
               <div className="mt-6 space-y-6">
                 <div>
                   <h3 className="text-sm font-semibold text-foreground">Email</h3>
-                  <p className="mt-1 text-muted-foreground">support@gateco.com</p>
+                  <p className="mt-1 text-muted-foreground">support@gateco.ai</p>
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-foreground">Response Time</h3>
@@ -48,7 +48,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="text-sm font-semibold text-foreground">Enterprise Inquiries</h3>
                   <p className="mt-1 text-muted-foreground">
-                    For custom deployments, dedicated support, and volume licensing, reach out to our enterprise team at enterprise@gateco.com.
+                    For custom deployments, dedicated support, and volume licensing, reach out to our enterprise team at enterprise@gateco.ai.
                   </p>
                 </div>
               </div>

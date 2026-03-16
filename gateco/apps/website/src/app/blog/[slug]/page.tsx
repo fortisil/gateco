@@ -1,13 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
-export const metadata: Metadata = {
-  title: 'Blog',
-  description:
-    'Insights on AI retrieval security, RAG authorization, and data governance from the Gateco team.',
-};
 
 interface BlogPost {
   slug: string;
@@ -29,7 +25,7 @@ const posts: BlogPost[] = [
     readTime: '6 min read',
     tags: ['Security', 'RAG', 'Architecture'],
     excerpt:
-      'Vector databases retrieve based on embedding similarity. They don\'t know who\'s asking. They don\'t check permissions. They just return the closest matches. This is the AI security gap — and it\'s wider than most teams realize.',
+      'Vector databases retrieve based on embedding similarity. They don\'t know who\'s asking. They don\'t check permissions. They just return the closest matches.',
     content: [
       'Your organization invested in SSO for identity, IAM for cloud resources, ACLs for file systems, and RBAC for applications. But when you deployed RAG, you created a new access surface that bypasses all of it.',
       'Here\'s the core problem: when a manager asks your AI copilot about compensation data, the vector database returns the most semantically relevant chunks — not the most appropriately authorized chunks. Semantic similarity does not equal permission to access.',
@@ -46,7 +42,7 @@ const posts: BlogPost[] = [
     readTime: '5 min read',
     tags: ['Product', 'Launch'],
     excerpt:
-      'Today we\'re launching Gateco — the security middleware between AI agents and organizational knowledge. Deny-by-default retrieval, 9 vector DB connectors, and full audit trails. Here\'s why we built it.',
+      'Today we\'re launching Gateco — the security middleware between AI agents and organizational knowledge.',
     content: [
       'AI agents are increasingly accessing organizational knowledge through vector databases. But vector databases have no concept of authorization — they retrieve by semantic similarity alone. This gap puts sensitive data at risk.',
       'Gateco is a permission-aware retrieval layer that enforces access policies at retrieval time. It connects to 9 vector databases (pgvector, Pinecone, Qdrant, Weaviate, Milvus, Chroma, OpenSearch, Supabase, and Neon) and provides deny-by-default retrieval enforcement.',
@@ -63,7 +59,7 @@ const posts: BlogPost[] = [
     readTime: '7 min read',
     tags: ['Technical', 'Architecture'],
     excerpt:
-      'Gateco assigns each connector a readiness level from L0 to L4 based on its security capability — not a percentage, but a progression through increasingly granular enforcement. Here\'s what each level means and how to reach it.',
+      'Gateco assigns each connector a readiness level from L0 to L4 based on its security capability.',
     content: [
       'When you connect a vector database to Gateco, it starts at L0 (Not Ready). Your goal is to progressively move up through the readiness levels as you configure policies and metadata. Each level represents a real capability milestone, not a score.',
       'L0 (Not Ready) means the connector is created but not reachable — credentials may be invalid or the database is down. L1 (Connection Ready) means Gateco can authenticate and reach your vector database. This is confirmed when the test connection endpoint returns a successful health check with latency.',
@@ -81,7 +77,7 @@ const posts: BlogPost[] = [
     readTime: '8 min read',
     tags: ['Technical', 'Integration'],
     excerpt:
-      'Gateco resolves policy-relevant metadata through a configurable 3-step hierarchy. Choose sidecar for simplicity, inline for existing payload metadata, or SQL views for Postgres-based systems. Here\'s when to use each.',
+      'Gateco resolves policy-relevant metadata through a configurable 3-step hierarchy.',
     content: [
       'When Gateco evaluates a retrieval, it needs to know the classification, sensitivity, domain, and ownership of each result. This metadata determines which policies apply and whether the requesting principal is authorized. The question is: where does this metadata come from?',
       'Sidecar mode (the default) stores metadata in Gateco\'s own registry. You bind metadata to resources via the API, CLI, or classification suggestion workflow. This is the simplest approach — no changes to your vector database, full control over the metadata. The tradeoff is that metadata lives at the resource level, not per-chunk, so you can reach L3 but not L4 readiness.',
@@ -99,7 +95,7 @@ const posts: BlogPost[] = [
     readTime: '4 min read',
     tags: ['Tutorial', 'Getting Started'],
     excerpt:
-      'A step-by-step walkthrough: install the Python SDK, connect a vector database, create a policy, and execute your first permission-aware retrieval. With actual code that runs.',
+      'Install the SDK, connect a vector database, create a policy, and execute your first secured retrieval.',
     content: [
       'Step 1: Install the SDK. Run pip install gateco-sdk, then authenticate: gateco login --email you@company.com --password secret. This stores credentials locally and you\'re ready to go.',
       'Step 2: Connect your vector database. Use the SDK or CLI to create a connector — Gateco supports pgvector, Pinecone, Qdrant, Weaviate, Milvus, Chroma, OpenSearch, Supabase, and Neon. For example: client.connectors.create(name="My Pinecone", type="pinecone", config={"api_key": "pk-...", "index_name": "knowledge"}). Then test it: client.connectors.test(connector.id) to verify connectivity.',
@@ -117,7 +113,7 @@ const posts: BlogPost[] = [
     readTime: '5 min read',
     tags: ['Tutorial', 'Pro Feature'],
     excerpt:
-      'The Access Simulator lets you dry-run policy evaluation to see exactly what a principal would be allowed or denied before activating policies in production. Here\'s how to use it.',
+      'Dry-run policy evaluation to see exactly what a principal would be allowed or denied.',
     content: [
       'Deploying access policies to production is high-stakes. An overly restrictive policy could block legitimate AI use cases. An overly permissive one defeats the purpose. The Access Simulator (available on Pro and Enterprise plans) lets you test policies without affecting real retrievals.',
       'The simulator takes a principal ID and optionally a connector ID, then evaluates all active policies to show what the principal can and cannot access. The response includes matched resource count, allowed count, denied count, and a full trace of policy decisions with reasons.',
@@ -134,7 +130,7 @@ const posts: BlogPost[] = [
     readTime: '6 min read',
     tags: ['Compliance', 'Enterprise'],
     excerpt:
-      'Regulations are catching up to AI. When auditors ask "who accessed what data through your AI system?", you need an answer. Gateco\'s audit trail covers 25 event types across every operation.',
+      'When auditors ask "who accessed what data through your AI system?", you need an answer.',
     content: [
       'As organizations deploy AI agents that access internal knowledge, regulators are asking pointed questions: Can you show who accessed what data? Can you prove your AI respects existing access controls? Can you produce an audit trail for a specific time period?',
       'Gateco logs every operation as an audit event with full context. Retrieval events record the requesting principal, connector, policy decision (allowed/denied), which policies matched, metadata resolution source, and timestamp. Policy lifecycle events track who created, modified, activated, or archived each policy.',
@@ -145,114 +141,138 @@ const posts: BlogPost[] = [
   },
 ];
 
-export default function BlogPage() {
+export async function generateStaticParams() {
+  return posts.map((post) => ({ slug: post.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const post = posts.find((p) => p.slug === params.slug);
+  if (!post) return { title: 'Post Not Found' };
+  return {
+    title: post.title,
+    description: post.excerpt,
+  };
+}
+
+export default function BlogPostPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const post = posts.find((p) => p.slug === params.slug);
+  if (!post) notFound();
+
+  // Find adjacent posts for navigation
+  const idx = posts.indexOf(post);
+  const prevPost = idx < posts.length - 1 ? posts[idx + 1] : null;
+  const nextPost = idx > 0 ? posts[idx - 1] : null;
+
   return (
     <>
       <Header />
       <main className="py-20 sm:py-32">
         <div className="container">
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-              Blog
-            </h1>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Insights on AI retrieval security, RAG authorization, and data governance.
-            </p>
-          </div>
+          <article className="mx-auto max-w-3xl">
+            {/* Back link */}
+            <Link
+              href="/blog"
+              className="group mb-8 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+              Back to blog
+            </Link>
 
-          {/* Tags filter */}
-          <div className="mx-auto mt-8 max-w-3xl">
-            <div className="flex flex-wrap justify-center gap-2">
-              {Array.from(new Set(posts.flatMap((p) => p.tags))).map((tag) => (
+            {/* Header */}
+            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+              <time>{post.date}</time>
+              <span aria-hidden="true">&middot;</span>
+              <span>{post.readTime}</span>
+              <span aria-hidden="true">&middot;</span>
+              <span>{post.author}</span>
+            </div>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              {post.title}
+            </h1>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground"
+                  className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
                 >
                   {tag}
                 </span>
               ))}
             </div>
-          </div>
 
-          {/* Featured post */}
-          <div className="mx-auto mt-12 max-w-3xl">
-            <article className="rounded-lg border-2 border-primary-600/20 bg-card p-8">
-              <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-semibold text-primary-700">
-                  Latest
-                </span>
-                <time>{posts[0].date}</time>
-                <span aria-hidden="true">&middot;</span>
-                <span>{posts[0].readTime}</span>
-              </div>
-              <Link href={`/blog/${posts[0].slug}`}>
-                <h2 className="mt-3 text-2xl font-semibold text-foreground hover:text-primary-600 transition-colors">
-                  {posts[0].title}
-                </h2>
-              </Link>
-              <p className="mt-4 leading-7 text-muted-foreground">
-                {posts[0].excerpt}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {posts[0].tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <Link
-                href={`/blog/${posts[0].slug}`}
-                className="mt-4 inline-block text-sm font-semibold text-primary-600 hover:text-primary-500"
-              >
-                Read full article &rarr;
-              </Link>
-            </article>
-          </div>
-
-          {/* Remaining posts */}
-          <div className="mx-auto mt-8 max-w-3xl space-y-8">
-            {posts.slice(1).map((post) => (
-              <article
-                key={post.slug}
-                className="rounded-lg border border-border bg-card p-8 transition-shadow hover:shadow-md"
-              >
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <time>{post.date}</time>
-                  <span aria-hidden="true">&middot;</span>
-                  <span>{post.readTime}</span>
-                  <span aria-hidden="true">&middot;</span>
-                  <span>{post.author}</span>
-                </div>
-                <Link href={`/blog/${post.slug}`}>
-                  <h2 className="mt-3 text-xl font-semibold text-foreground hover:text-primary-600 transition-colors">
-                    {post.title}
-                  </h2>
-                </Link>
-                <p className="mt-3 text-muted-foreground leading-7">
-                  {post.excerpt}
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="mt-3 inline-block text-sm font-semibold text-primary-600 hover:text-primary-500"
+            {/* Content */}
+            <div className="mt-10 space-y-6">
+              {post.content.map((paragraph, i) => (
+                <p
+                  key={i}
+                  className="text-base leading-8 text-muted-foreground"
                 >
-                  Read more &rarr;
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+
+            {/* Divider */}
+            <hr className="my-12 border-border" />
+
+            {/* Post navigation */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {prevPost && (
+                <Link
+                  href={`/blog/${prevPost.slug}`}
+                  className="rounded-lg border border-border p-4 hover:bg-muted/50 transition-colors"
+                >
+                  <p className="text-xs text-muted-foreground">&larr; Previous</p>
+                  <p className="mt-1 text-sm font-medium text-foreground">
+                    {prevPost.title}
+                  </p>
                 </Link>
-              </article>
-            ))}
-          </div>
+              )}
+              {nextPost && (
+                <Link
+                  href={`/blog/${nextPost.slug}`}
+                  className="rounded-lg border border-border p-4 hover:bg-muted/50 transition-colors sm:text-right"
+                >
+                  <p className="text-xs text-muted-foreground">Next &rarr;</p>
+                  <p className="mt-1 text-sm font-medium text-foreground">
+                    {nextPost.title}
+                  </p>
+                </Link>
+              )}
+            </div>
+
+            {/* CTA */}
+            <div className="mt-12 rounded-lg bg-muted/50 p-8 text-center">
+              <h2 className="text-xl font-semibold text-foreground">
+                Ready to secure your AI retrieval?
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Start with the free tier — 100 retrievals/month, no credit card required.
+              </p>
+              <div className="mt-4 flex justify-center gap-3">
+                <Link
+                  href="/pricing"
+                  className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-500 transition-colors"
+                >
+                  Get started
+                </Link>
+                <Link
+                  href="/docs"
+                  className="rounded-lg border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
+                >
+                  Read the docs
+                </Link>
+              </div>
+            </div>
+          </article>
         </div>
       </main>
       <Footer />
