@@ -36,12 +36,12 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white text-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="text-3xl font-bold text-primary">gateco</Link>
+          <Link to="/" className="text-3xl font-bold text-primary-600">gateco</Link>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+        <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
           <LoginForm onSubmit={handleSubmit} error={error} onClearError={() => setError(undefined)} />
         </div>
         <div className="mt-4">

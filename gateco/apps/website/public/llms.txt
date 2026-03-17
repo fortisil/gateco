@@ -1,0 +1,54 @@
+# Gateco
+
+> Permission-aware retrieval layer for AI systems — the security middleware between AI agents and organizational knowledge.
+
+## Links
+
+- Full LLM context: https://gateco.ai/llms-full.txt
+- Documentation: https://gateco.ai/docs
+- OpenAPI spec: https://gateco.ai/openapi.json
+- API base URL: https://api.gateco.dev
+
+## Install
+
+```bash
+# Python
+pip install gateco-sdk
+
+# TypeScript
+npm install @gateco/sdk
+```
+
+## Quick Start (Python)
+
+```python
+from gateco_sdk import GatecoClient
+
+with GatecoClient("https://api.gateco.dev") as client:
+    client.login("user@company.com", "password")
+    result = client.retrievals.execute(
+        connector_id="conn_abc",
+        principal_id="user_123",
+        query_vector=[0.1, 0.2, 0.3],
+        top_k=10,
+    )
+    for item in result.results:
+        print(item.vector_id, item.score)
+```
+
+## Core Concepts
+
+- **Connectors** — Connections to vector databases (pgvector, Pinecone, Qdrant, Weaviate, Milvus, Chroma, OpenSearch, Supabase, Neon).
+- **Policies** — Access rules (RBAC, ABAC, REBAC) evaluated at every retrieval. Deny-by-default.
+- **Secured Retrievals** — Permission-checked queries that enforce all active policies against the requesting principal.
+- **Principals** — Identities requesting access: users, service accounts, or AI agents.
+- **Gated Resources** — Vector data with security metadata: classification, sensitivity, domain, ownership.
+- **Readiness Levels (L0-L4)** — Semantic security posture per connector, from unconnected (L0) to chunk-level enforcement (L4).
+
+## Plan Tiers
+
+| Plan | Retrievals/mo | Connectors | Price |
+|------|---------------|------------|-------|
+| Free | 100 | 1 | $0/mo |
+| Pro | 10,000 | 5 | $49/mo |
+| Enterprise | Unlimited | Unlimited | $199/mo |

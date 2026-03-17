@@ -16,7 +16,7 @@ export default function HeroSection({
   kicker,
   title,
   subtitle,
-  primaryCta = { label: "Get started", href: "/pricing" },
+  primaryCta = { label: "Get started", href: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5173'}/login` },
   secondaryCta = { label: "Documentation", href: "/docs" },
 }: HeroSectionProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

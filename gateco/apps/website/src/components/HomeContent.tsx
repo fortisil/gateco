@@ -149,7 +149,7 @@ export default function HomeContent() {
           </>
         }
         subtitle="The security middleware between AI agents and your organizational data. Policy enforcement, identity-based access control, and full auditability for every retrieval."
-        primaryCta={{ label: "Start for free", href: "/pricing" }}
+        primaryCta={{ label: "Start for free", href: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5173'}/login` }}
         secondaryCta={{ label: "Read the docs", href: "/docs" }}
       />
 
@@ -360,12 +360,12 @@ results = client.retrieve(
             vector DB in under 5 minutes.
           </p>
           <div className="mt-8 flex items-center justify-center gap-x-4">
-            <Link
-              href="/pricing"
+            <a
+              href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5173'}/login`}
               className="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-primary-600 shadow-lg hover:bg-primary-50 transition-colors"
             >
               Start for free
-            </Link>
+            </a>
             <Link
               href="/contact"
               className="rounded-lg border border-primary-300 px-6 py-3 text-sm font-semibold text-white hover:bg-primary-500 transition-colors"

@@ -598,6 +598,13 @@ export default function DocsPage() {
               </Link>{' '}
               for support.
             </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Building with an AI coding assistant?{' '}
+              <Link href="/llms-full.txt" className="text-primary-600 hover:underline">
+                llms-full.txt
+              </Link>{' '}
+              provides LLM-friendly context for integration.
+            </p>
           </div>
         </div>
       </main>

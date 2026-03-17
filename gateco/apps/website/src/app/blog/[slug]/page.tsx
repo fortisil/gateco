@@ -258,12 +258,12 @@ export default function BlogPostPage({
                 Start with the free tier — 100 retrievals/month, no credit card required.
               </p>
               <div className="mt-4 flex justify-center gap-3">
-                <Link
-                  href="/pricing"
+                <a
+                  href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5173'}/login`}
                   className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-500 transition-colors"
                 >
                   Get started
-                </Link>
+                </a>
                 <Link
                   href="/docs"
                   className="rounded-lg border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"

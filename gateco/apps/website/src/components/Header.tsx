@@ -36,12 +36,12 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          <Link
-            href="/pricing"
+          <a
+            href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5173'}/login`}
             className="rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 transition-colors"
           >
             Get Started
-          </Link>
+          </a>
         </div>
 
         {/* Mobile Menu Button */}
@@ -76,13 +76,13 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/pricing"
+            <a
+              href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5173'}/login`}
               className="rounded-md bg-primary-600 px-4 py-2 text-center text-sm font-semibold text-white"
               onClick={() => setMobileMenuOpen(false)}
             >
               Get Started
-            </Link>
+            </a>
           </div>
         </div>
       )}

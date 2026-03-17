@@ -90,7 +90,7 @@ export function LoginForm({ onSubmit, error, isLoading, onClearError }: LoginFor
 
   return (
     <div className="w-full max-w-md space-y-6">
-      <h2 role="heading" className="text-2xl font-bold text-center">
+      <h2 role="heading" className="text-2xl font-bold text-center text-foreground">
         Log in
       </h2>
 
@@ -102,7 +102,7 @@ export function LoginForm({ onSubmit, error, isLoading, onClearError }: LoginFor
 
       <form role="form" onSubmit={handleSubmit} className="space-y-4" noValidate>
         <div className="space-y-2">
-          <label htmlFor="login-email" className="text-sm font-medium">
+          <label htmlFor="login-email" className="text-sm font-medium text-foreground">
             Email
           </label>
           <Input
@@ -121,7 +121,7 @@ export function LoginForm({ onSubmit, error, isLoading, onClearError }: LoginFor
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="login-password" className="text-sm font-medium">
+          <label htmlFor="login-password" className="text-sm font-medium text-foreground">
             Password
           </label>
           <div className="relative">
@@ -151,7 +151,7 @@ export function LoginForm({ onSubmit, error, isLoading, onClearError }: LoginFor
         </div>
 
         <div className="flex items-center justify-between">
-          <label className="flex items-center gap-2 text-sm">
+          <label className="flex items-center gap-2 text-sm text-foreground">
             <input
               type="checkbox"
               role="checkbox"
@@ -166,7 +166,7 @@ export function LoginForm({ onSubmit, error, isLoading, onClearError }: LoginFor
           <button
             type="button"
             onClick={() => setShowForgotMessage((prev) => !prev)}
-            className="text-sm text-primary hover:underline"
+            className="text-sm text-primary-600 hover:text-primary-500 hover:underline"
           >
             Forgot password?
           </button>
@@ -204,7 +204,7 @@ export function LoginForm({ onSubmit, error, isLoading, onClearError }: LoginFor
 
       <p className="text-center text-sm text-muted-foreground">
         Don't have an account?{' '}
-        <Link to="/signup" className="text-primary hover:underline">
+        <Link to="/signup" className="text-primary-600 hover:text-primary-500 hover:underline">
           Sign up
         </Link>
       </p>

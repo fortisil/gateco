@@ -1,0 +1,685 @@
+# Gateco — Full LLM Context
+
+> Permission-aware retrieval layer for AI systems — the security and permission middleware between AI agents and organizational knowledge.
+
+## 1. Overview
+
+Gateco is a permission-aware retrieval layer that gates access to digital resources with policy enforcement, identity-based access control, and auditability. It is **not** a vector database, RAG framework, or IAM replacement — it is the missing middleware between AI agents and organizational knowledge.
+
+**Business model:** 3-tier SaaS (Free / Pro / Enterprise) with usage-based billing on "secured retrievals."
+
+- **API base URL:** `https://api.gateco.dev`
+- **Domain:** `gateco.ai`
+- **OpenAPI spec:** `https://gateco.ai/openapi.json`
+- **Docs:** `https://gateco.ai/docs`
+
+All API endpoints are prefixed with `/api/`. Requests and responses use JSON. List endpoints return an envelope: `{ "data": [...], "page": 1, "per_page": 20, "total": 100 }`.
+
+---
+
+## 2. Authentication
+
+### JWT Login
+
+```bash
+curl -X POST https://api.gateco.dev/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@company.com","password":"secret"}'
+```
+
+Returns `{ "access_token": "...", "refresh_token": "..." }`. Use the access token as `Authorization: Bearer <token>`.
+
+### API Key
+
+Pass `api_key` to the SDK constructor instead of calling login. Mutually exclusive with JWT flow.
+
+### OAuth Exchange
+
+For Google/GitHub OAuth, the frontend receives an auth `code` and exchanges it:
+
+```
+POST /api/auth/exchange  { "code": "...", "provider": "google" }
+```
+
+### Token Refresh
+
+```
+POST /api/auth/refresh  { "refresh_token": "..." }
+```
+
+Both SDKs handle token refresh automatically — proactive refresh before expiry, fallback refresh on 401.
+
+---
+
+## 3. Python SDK
+
+```bash
+pip install gateco-sdk
+```
+
+### Client Initialization
+
+```python
+from gateco_sdk import GatecoClient, AsyncGatecoClient
+
+# Synchronous
+with GatecoClient("https://api.gateco.dev") as client:
+    client.login("user@company.com", "password")
+
+# Async
+async with AsyncGatecoClient("https://api.gateco.dev") as client:
+    await client.login("user@company.com", "password")
+
+# With API key (no login needed)
+client = GatecoClient("https://api.gateco.dev", api_key="gk_...")
+```
+
+Constructor options: `base_url`, `api_key`, `timeout` (seconds, default 30), `max_retries` (default 2), `retry_backoff_factor` (default 0.5).
+
+### Resource Namespaces
+
+#### client.auth
+- `login(email, password) -> TokenResponse`
+- `signup(name, email, password, organization_name) -> TokenResponse`
+- `refresh() -> TokenResponse`
+- `logout() -> None`
+
+#### client.connectors
+- `list(page=1, per_page=20) -> Page`
+- `get(connector_id) -> Connector`
+- `create(name, type, config=None, **kwargs) -> Connector`
+- `update(connector_id, **kwargs) -> Connector`
+- `delete(connector_id) -> None`
+- `test(connector_id) -> TestResult`
+- `bind(connector_id, bindings) -> BindResult`
+- `get_search_config(connector_id) -> dict`
+- `update_search_config(connector_id, search_config) -> dict`
+- `get_ingestion_config(connector_id) -> dict`
+- `update_ingestion_config(connector_id, ingestion_config) -> dict`
+- `get_coverage(connector_id) -> Coverage`
+- `suggest_classifications(connector_id, **kwargs) -> Suggestions`
+- `apply_suggestions(connector_id, suggestions) -> ApplyResult`
+
+#### client.retrievals
+- `execute(query_vector=None, **kwargs) -> RetrievalResult`
+- `list(page=1, per_page=20, **filters) -> Page`
+- `get(retrieval_id) -> Retrieval`
+
+#### client.policies
+- `list(page=1, per_page=20) -> Page`
+- `get(policy_id) -> Policy`
+- `create(name, type, effect, **kwargs) -> Policy`
+- `update(policy_id, **kwargs) -> Policy`
+- `delete(policy_id) -> None`
+- `activate(policy_id) -> Policy`
+- `archive(policy_id) -> Policy`
+
+#### client.ingest
+- `document(connector_id, external_resource_id, text, **kwargs) -> IngestResult`
+- `batch(connector_id, records, **kwargs) -> BatchResult`
+
+#### client.identity_providers
+- `list(page=1, per_page=20) -> Page`
+- `get(idp_id) -> IdentityProvider`
+- `create(name, type, **kwargs) -> IdentityProvider`
+- `update(idp_id, **kwargs) -> IdentityProvider`
+- `delete(idp_id) -> None`
+- `sync(idp_id) -> SyncResult`
+
+#### client.principals
+- `list(page=1, per_page=20) -> Page`
+- `get(principal_id) -> Principal`
+
+#### client.data_catalog
+- `list(page=1, per_page=20, **kwargs) -> Page`
+- `get(resource_id) -> Resource`
+- `update(resource_id, **kwargs) -> Resource`
+
+#### client.pipelines
+- `list(page=1, per_page=20) -> Page`
+- `get(pipeline_id) -> Pipeline`
+- `create(name, source_connector_id, **kwargs) -> Pipeline`
+- `update(pipeline_id, **kwargs) -> Pipeline`
+- `get_runs(pipeline_id) -> list`
+- `run(pipeline_id) -> RunResult`
+
+#### client.billing
+- `get_plans() -> list`
+- `get_usage() -> Usage`
+- `get_invoices(page=1, per_page=20) -> Page`
+- `get_subscription() -> Subscription`
+- `start_checkout(plan_id, billing_period="monthly") -> Checkout`
+- `create_portal(return_url=None) -> Portal`
+
+#### client.audit
+- `list(page=1, per_page=20, **kwargs) -> Page`
+- `export_csv(**kwargs) -> Export`
+
+#### client.simulator
+- `run(principal_id, **kwargs) -> SimulationResult`
+
+#### client.dashboard
+- `get_stats() -> Stats`
+
+#### client.retroactive
+- `register(connector_id, **kwargs) -> RegisterResult`
+
+---
+
+## 4. TypeScript SDK
+
+```bash
+npm install @gateco/sdk
+```
+
+### Client Initialization
+
+```typescript
+import { GatecoClient } from "@gateco/sdk";
+
+const client = new GatecoClient({ baseUrl: "https://api.gateco.dev" });
+await client.login("user@company.com", "password");
+
+// With API key
+const client = new GatecoClient({
+  baseUrl: "https://api.gateco.dev",
+  apiKey: "gk_...",
+});
+```
+
+Constructor options: `baseUrl`, `apiKey`, `timeout` (ms), `maxRetries` (default 2), `retryBackoffFactor` (default 0.5).
+
+### Resource Namespaces
+
+All namespaces mirror the Python SDK with camelCase naming:
+
+- `client.auth` — `login()`, `signup()`, `refresh()`, `logout()`
+- `client.connectors` — `list()`, `get()`, `create()`, `update()`, `delete()`, `test()`, `bind()`, `getSearchConfig()`, `updateSearchConfig()`, `getIngestionConfig()`, `updateIngestionConfig()`, `getCoverage()`, `suggestClassifications()`, `applySuggestions()`
+- `client.retrievals` — `execute()`, `list()`, `get()`
+- `client.policies` — `list()`, `get()`, `create()`, `update()`, `delete()`, `activate()`, `archive()`
+- `client.ingest` — `document()`, `batch()`
+- `client.identityProviders` — `list()`, `get()`, `create()`, `update()`, `delete()`, `sync()`
+- `client.principals` — `list()`, `get()`
+- `client.dataCatalog` — `list()`, `get()`, `update()`
+- `client.pipelines` — `list()`, `get()`, `create()`, `update()`, `getRuns()`, `run()`
+- `client.billing` — `getPlans()`, `getUsage()`, `getInvoices()`, `getSubscription()`, `startCheckout()`, `createPortal()`
+- `client.audit` — `list()`, `exportCsv()`
+- `client.simulator` — `run()`
+- `client.dashboard` — `getStats()`
+- `client.retroactive` — `register()`
+
+Call `client.close()` when done.
+
+---
+
+## 5. CLI
+
+The CLI is installed with the Python SDK (`pip install gateco-sdk`).
+
+```bash
+# Authentication
+gateco login --email user@company.com --password secret
+
+# Connectors
+gateco connectors list
+gateco connectors create --name "My DB" --type pgvector --config '{"host":"..."}'
+gateco connectors test <connector_id>
+
+# Retrievals
+gateco retrieve --connector-id <id> --principal-id <id> --vector-file embedding.json --top-k 10
+
+# Policies
+gateco policies list
+gateco policies create --name "Policy" --type rbac --effect allow
+
+# Ingestion
+gateco ingest report.txt --connector-id <id> --classification confidential --sensitivity high
+gateco ingest-batch ./documents --connector-id <id> --glob "*.md"
+
+# Classification suggestions
+gateco suggest-classifications <connector_id>
+```
+
+---
+
+## 6. Core Concepts
+
+### Connectors
+Connections to your vector databases. Gateco supports 9 connectors: pgvector, Pinecone, Qdrant, Weaviate, Milvus, Chroma, OpenSearch, Supabase, and Neon. Tier 1 connectors (pgvector, Supabase, Neon, Pinecone, Qdrant) support full ingestion workflows. Each connector manages connection credentials, search configuration, and metadata resolution.
+
+### Policies
+Rules that determine who can access what data. Three types: RBAC (role-based), ABAC (attribute-based), and REBAC (relationship-based). Policies have a lifecycle: Draft -> Active -> Archived. Only active policies are enforced. Deny-by-default model — without an explicit allow policy, access is denied.
+
+### Secured Retrievals
+Permission-checked queries against your vector database. Every retrieval evaluates all active policies against the requesting principal and target resources. Outcomes: Allowed (all results pass), Partial (some filtered), or Denied (no access).
+
+### Principals
+The identities requesting access — users, service accounts, or AI agents. Principals are synced from identity providers (Azure Entra ID, AWS IAM, Okta, GCP) or managed directly.
+
+### Gated Resources
+Your vector data with security metadata attached — classification (public/internal/confidential/restricted), sensitivity (low/medium/high/critical), domain, and ownership. Resources are bound to connectors.
+
+### Readiness Levels (L0-L4)
+A semantic measure of security posture per connector:
+- **L0: Not Ready** — No connection established
+- **L1: Connection Ready** — Connector authenticated and reachable
+- **L2: Search Ready** — Search/retrieval operations functional
+- **L3: Resource Policy** — Resource-level policy bindings exist and active policies configured
+- **L4: Chunk Policy** — Chunk-level policy metadata available (highest granularity)
+
+---
+
+## 7. Connectors Reference
+
+### Supported Connectors
+
+| Connector | Type Value | Tier | Ingestion |
+|-----------|-----------|------|-----------|
+| pgvector | `pgvector` | Tier 1 | Full |
+| Supabase | `supabase` | Tier 1 | Full |
+| Neon | `neon` | Tier 1 | Full |
+| Pinecone | `pinecone` | Tier 1 | Full |
+| Qdrant | `qdrant` | Tier 1 | Full |
+| OpenSearch | `opensearch` | Tier 2 | Retroactive only |
+| Weaviate | `weaviate` | Tier 2 | Retroactive only |
+| Milvus | `milvus` | Tier 2 | Retroactive only |
+| Chroma | `chroma` | Tier 2 | Retroactive only |
+
+### Metadata Resolution Modes
+
+Configured per-connector via `metadata_resolution_mode`:
+
+- **`sidecar`** (default) — Metadata managed in Gateco's own registry
+- **`inline`** — Metadata extracted from vector payloads (requires `metadata_field_mapping` in config)
+- **`sql_view`** — Metadata read from a Postgres view (Postgres-family connectors only: pgvector, supabase, neon)
+- **`auto`** — Tries inline -> sql_view -> sidecar in order
+
+### Create and Test a Connector
+
+```python
+connector = client.connectors.create(
+    name="Production Pinecone",
+    type="pinecone",
+    config={
+        "api_key": "pk-...",
+        "environment": "us-east-1",
+        "index_name": "knowledge-base",
+    },
+)
+result = client.connectors.test(connector.id)
+print(result.status, result.latency_ms)
+```
+
+---
+
+## 8. Policies Reference
+
+### Create and Activate a Policy
+
+```python
+policy = client.policies.create(
+    name="Engineering Data Access",
+    type="rbac",
+    effect="allow",
+    description="Allow engineering team to access internal docs",
+    resource_selectors=[{
+        "classification": "internal",
+        "domain": "engineering",
+    }],
+    rules=[{
+        "role": "engineer",
+    }],
+)
+client.policies.activate(policy.id)
+```
+
+### Policy Lifecycle
+
+- **Draft** — Created but not enforced. Safe to edit and test.
+- **Active** — Enforced on all retrievals. Use Access Simulator (Pro) to test before activating.
+- **Archived** — Retained for audit history but no longer enforced.
+
+### Policy Types
+
+- **RBAC** — Match by role (e.g., `engineer`, `admin`)
+- **ABAC** — Match by attributes (e.g., department, clearance level)
+- **REBAC** — Match by relationships (e.g., document owner, team member)
+
+---
+
+## 9. Retrieval Flow
+
+### Execute a Retrieval
+
+```python
+result = client.retrievals.execute(
+    connector_id="conn_abc",
+    principal_id="user_123",
+    query_vector=[0.1, 0.2, 0.3, ...],
+    top_k=10,
+)
+
+print(result.outcome)  # "allowed", "partial", or "denied"
+for item in result.results:
+    print(item.vector_id, item.score, item.metadata)
+```
+
+### Response Structure
+
+- `outcome` — `"allowed"` (all pass), `"partial"` (some filtered), `"denied"` (no access)
+- `results` — List of matched items with `vector_id`, `score`, `metadata`
+- `total_candidates` — Number of vectors matched before policy filtering
+- `filtered_count` — Number of results removed by policy enforcement
+- `policy_traces` — Per-result policy evaluation details (which policies matched, effect)
+
+### TypeScript
+
+```typescript
+const result = await client.retrievals.execute({
+  connectorId: "conn_abc",
+  principalId: "user_123",
+  queryVector: [0.1, 0.2, 0.3],
+  topK: 10,
+});
+```
+
+---
+
+## 10. Ingestion
+
+Available for Tier 1 connectors only (pgvector, Supabase, Neon, Pinecone, Qdrant).
+
+### Single Document
+
+```python
+response = client.ingest.document(
+    connector_id="conn_abc",
+    external_resource_id="doc-quarterly-report",
+    text="Q4 2025 financial results...",
+    classification="confidential",
+    sensitivity="high",
+    domain="finance",
+    labels=["quarterly", "financial"],
+    owner_principal_id="user_cfo",
+)
+print(f"Ingested {response.chunk_count} chunks")
+```
+
+### Batch Ingestion
+
+```python
+response = client.ingest.batch(
+    connector_id="conn_abc",
+    records=[
+        {
+            "external_resource_id": "doc-001",
+            "text": "First document content...",
+            "classification": "internal",
+        },
+        {
+            "external_resource_id": "doc-002",
+            "text": "Second document content...",
+            "classification": "public",
+        },
+    ],
+)
+print(f"Ingested {response.total_chunks} total chunks")
+```
+
+### Idempotency
+
+Ingestion is idempotent on `external_resource_id` — re-ingesting the same ID replaces the previous version.
+
+---
+
+## 11. Classification Suggestions
+
+Rule-based engine that scans connector resources and suggests classifications via keyword pattern matching.
+
+### Workflow: Suggest -> Review -> Apply
+
+```python
+# 1. Scan and get suggestions
+suggestions = client.connectors.suggest_classifications(
+    connector_id="conn_abc",
+    scan_limit=1000,
+    sample_size=10,
+)
+
+# 2. Review
+for s in suggestions.suggestions:
+    print(f"{s.resource_key}: {s.suggested_classification} "
+          f"({s.confidence:.0%}) — {s.reasoning}")
+
+# 3. Apply approved suggestions
+result = client.connectors.apply_suggestions(
+    connector_id="conn_abc",
+    suggestions=suggestions.suggestions,
+)
+print(f"Applied {result.applied}, created {result.resources_created} resources")
+```
+
+### Classification Levels
+
+| Classification | Sensitivity | Example |
+|---------------|-------------|---------|
+| Public | Low | Blog posts, FAQs, product docs |
+| Internal | Medium | Wiki pages, onboarding materials |
+| Confidential | High | HR records, employee data |
+| Restricted | Critical | Financial reports, legal contracts |
+
+---
+
+## 12. Access Simulator
+
+Dry-run policy evaluation to test what a principal can access before going live. Available on Pro and Enterprise plans.
+
+```python
+result = client.simulator.run(
+    principal_id="user_123",
+    connector_id="conn_abc",
+)
+print(f"Matched: {result.matched_count}")
+print(f"Allowed: {result.allowed_count}")
+print(f"Denied: {result.denied_count}")
+
+for trace in result.traces:
+    print(f"  {trace.resource_id}: {trace.decision} — {trace.reason}")
+```
+
+---
+
+## 13. Audit Trail
+
+Every operation is logged with 25 event types covering retrievals, policy changes, connector operations, ingestion, and more.
+
+### Query Events
+
+```python
+page = client.audit.list(
+    event_types="retrieval_allowed,retrieval_denied",
+    per_page=50,
+)
+for event in page.items:
+    print(f"{event.event_type} by {event.actor} at {event.created_at}")
+```
+
+### Export (Pro tier)
+
+```python
+export = client.audit.export_csv(
+    date_from="2025-01-01",
+    date_to="2025-03-31",
+    format="csv",
+)
+```
+
+### Event Categories
+
+- **User** — login, logout, settings_changed
+- **Connector** — added, updated, tested, removed, sync events
+- **Policy** — created, updated, activated, archived, deleted
+- **Retrieval** — allowed, denied (with full policy trace)
+- **Data** — metadata_bound, document_ingested, batch_ingested
+- **Identity Provider** — added, updated, removed, synced
+- **Pipeline** — created, updated, run, error
+
+---
+
+## 14. Pagination
+
+All list endpoints return paginated responses in an envelope:
+
+```json
+{
+  "data": [...],
+  "page": 1,
+  "per_page": 20,
+  "total": 100
+}
+```
+
+Query parameters: `page` (default 1), `per_page` (default 20, max 100).
+
+### Python — iterate all pages
+
+```python
+page = client.connectors.list(page=1, per_page=50)
+# Access page.items, page.total, page.page, page.per_page
+```
+
+### TypeScript — iterate all pages
+
+```typescript
+const page = await client.connectors.list({ page: 1, perPage: 50 });
+// Access page.items, page.total, page.page, page.perPage
+```
+
+---
+
+## 15. Error Handling
+
+### HTTP Error Codes
+
+| Code | Meaning |
+|------|---------|
+| 400 | Bad request — validation failed |
+| 401 | Unauthorized — invalid or expired token |
+| 403 | Forbidden — insufficient permissions or plan entitlement |
+| 404 | Not found |
+| 409 | Conflict — duplicate resource |
+| 422 | Validation error — request body schema mismatch |
+| 429 | Rate limited — too many requests |
+| 500 | Internal server error |
+
+### SDK Error Hierarchy
+
+Both SDKs raise typed errors:
+
+- `GatecoError` — base error
+- `AuthenticationError` — 401 responses
+- `ForbiddenError` — 403 responses
+- `NotFoundError` — 404 responses
+- `ValidationError` — 422 responses
+- `RateLimitError` — 429 responses
+- `ServerError` — 5xx responses
+
+### Auto-Retry
+
+Both SDKs automatically retry on 429 and 5xx with exponential backoff (configurable via `max_retries` and `retry_backoff_factor`).
+
+### Error Response Format
+
+```json
+{
+  "detail": "Human-readable error message"
+}
+```
+
+---
+
+## 16. Rate Limits & Plan Tiers
+
+| Resource | Free | Pro | Enterprise |
+|----------|------|-----|------------|
+| Secured retrievals/mo | 100 | 10,000 | Unlimited |
+| Connectors | 1 | 5 | Unlimited |
+| Identity providers | 1 | 3 | Unlimited |
+| Policies | 3 | Unlimited | Unlimited |
+| Team members | 1 | 10 | Unlimited |
+| Audit log retention | Limited | 30 days | Extended |
+| Access Simulator | No | Yes | Yes |
+| Audit export | No | Yes | Yes |
+| SSO / SCIM | No | No | Yes |
+
+**Pricing:** Free ($0/mo), Pro ($49/mo), Enterprise ($199/mo).
+
+---
+
+## 17. API Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | /api/auth/login | Authenticate and get JWT tokens |
+| POST | /api/auth/signup | Create account and organization |
+| POST | /api/auth/refresh | Refresh access token |
+| POST | /api/auth/logout | Invalidate session |
+| POST | /api/auth/exchange | Exchange OAuth code for tokens |
+| GET | /api/auth/google | Initiate Google OAuth |
+| GET | /api/auth/github | Initiate GitHub OAuth |
+| GET | /api/users/me | Get current user profile |
+| PATCH | /api/users/me | Update current user profile |
+| GET | /api/connectors | List connectors |
+| POST | /api/connectors | Create connector |
+| GET | /api/connectors/:id | Get connector |
+| PATCH | /api/connectors/:id | Update connector |
+| DELETE | /api/connectors/:id | Delete connector |
+| POST | /api/connectors/:id/test | Test connector connectivity |
+| POST | /api/connectors/:id/bind | Bind metadata to resources |
+| GET | /api/connectors/:id/coverage | Get metadata coverage |
+| GET | /api/connectors/:id/search-config | Get search configuration |
+| PATCH | /api/connectors/:id/search-config | Update search configuration |
+| GET | /api/connectors/:id/ingestion-config | Get ingestion configuration |
+| PATCH | /api/connectors/:id/ingestion-config | Update ingestion configuration |
+| POST | /api/connectors/:id/suggest-classifications | Get classification suggestions |
+| POST | /api/connectors/:id/apply-suggestions | Apply approved suggestions |
+| GET | /api/policies | List policies |
+| POST | /api/policies | Create policy |
+| GET | /api/policies/:id | Get policy |
+| PATCH | /api/policies/:id | Update policy |
+| DELETE | /api/policies/:id | Delete policy |
+| POST | /api/policies/:id/activate | Activate policy |
+| POST | /api/policies/:id/archive | Archive policy |
+| POST | /api/retrievals/execute | Execute secured retrieval |
+| GET | /api/retrievals | List past retrievals |
+| GET | /api/retrievals/:id | Get retrieval detail |
+| POST | /api/v1/ingest | Ingest single document |
+| POST | /api/v1/ingest/batch | Batch ingest documents |
+| POST | /api/v1/retroactive-register | Register existing vectors |
+| GET | /api/identity-providers | List identity providers |
+| POST | /api/identity-providers | Create identity provider |
+| GET | /api/identity-providers/:id | Get identity provider |
+| PATCH | /api/identity-providers/:id | Update identity provider |
+| DELETE | /api/identity-providers/:id | Delete identity provider |
+| POST | /api/identity-providers/:id/sync | Sync principals from provider |
+| GET | /api/principals | List principals |
+| GET | /api/principals/:id | Get principal |
+| GET | /api/data-catalog | List gated resources |
+| GET | /api/data-catalog/:id | Get resource detail |
+| PATCH | /api/data-catalog/:id | Update resource metadata |
+| GET | /api/pipelines | List pipelines |
+| POST | /api/pipelines | Create pipeline |
+| GET | /api/pipelines/:id | Get pipeline |
+| PATCH | /api/pipelines/:id | Update pipeline |
+| POST | /api/pipelines/:id/run | Run pipeline |
+| GET | /api/pipelines/:id/runs | List pipeline runs |
+| POST | /api/simulator/run | Run access simulation (Pro+) |
+| GET | /api/audit-log | List audit events |
+| POST | /api/audit-log/export | Export audit log (Pro+) |
+| GET | /api/plans | List available plans |
+| GET | /api/billing/usage | Get current usage |
+| GET | /api/billing/subscription | Get subscription details |
+| GET | /api/billing/invoices | List invoices |
+| POST | /api/billing/portal | Create Stripe billing portal |
+| POST | /api/checkout/start | Start plan checkout |
+| GET | /api/dashboard/stats | Get dashboard statistics |
