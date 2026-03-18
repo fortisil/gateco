@@ -21,9 +21,8 @@ const POLICY_TYPES: { value: PolicyType; label: string }[] = [
 
 const OPERATORS: { value: PolicyCondition['operator']; label: string }[] = [
   { value: 'eq', label: 'equals' },
-  { value: 'neq', label: 'not equals' },
+  { value: 'ne', label: 'not equals' },
   { value: 'in', label: 'in' },
-  { value: 'not_in', label: 'not in' },
   { value: 'contains', label: 'contains' },
   { value: 'gte', label: '>=' },
   { value: 'lte', label: '<=' },
@@ -157,8 +156,8 @@ export function PolicyDialog({ open, onOpenChange, mode, initialData }: PolicyDi
       ...r,
       conditions: r.conditions.map((c) => ({
         ...c,
-        value: (c.operator === 'in' || c.operator === 'not_in') && typeof c.value === 'string'
-          ? c.value.split(',').map((v) => v.trim())
+        value: c.operator === 'in' && typeof c.value === 'string'
+          ? c.value.split(',').map((v: string) => v.trim())
           : c.value,
       })),
     }));
@@ -277,12 +276,13 @@ export function PolicyDialog({ open, onOpenChange, mode, initialData }: PolicyDi
 
                 <div className="space-y-2">
                   <p className="text-xs text-muted-foreground font-medium">Conditions</p>
+                  <p className="text-xs text-muted-foreground">Prefix fields with resource. or principal. (e.g., resource.classification, principal.groups)</p>
                   {rule.conditions.map((cond, ci) => (
                     <div key={ci} className="flex items-center gap-2">
                       <Input
                         value={cond.field}
                         onChange={(e) => updateCondition(ri, ci, { field: e.target.value })}
-                        placeholder="principal.group"
+                        placeholder="resource.classification"
                         className="text-sm flex-1"
                       />
                       <select

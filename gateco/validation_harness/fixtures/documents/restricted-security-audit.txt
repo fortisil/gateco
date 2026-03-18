@@ -1,0 +1,31 @@
+Restricted Security Audit Report
+
+Classification: Restricted
+Conducted by: External Security Firm (RedTeam Partners)
+Date: January 2026
+Sensitivity: Critical
+
+Executive Summary:
+Penetration testing of the Gateco platform identified 3 high-severity, 7 medium-severity, and 12 low-severity findings. All high-severity findings have been remediated as of February 15, 2026.
+
+High Severity Findings (Remediated):
+
+H1: JWT Token Rotation Gap
+Description: Refresh tokens were not invalidated after password change, allowing continued access with stale credentials.
+Remediation: Implemented token family tracking with cascade revocation on password change.
+
+H2: SQL Injection in Connector Config Validation
+Description: Custom SQL view configuration accepted unsanitized identifiers in certain edge cases.
+Remediation: Replaced string interpolation with validated identifier parsing. All SQL view configs now use structured validated identifiers only.
+
+H3: Rate Limiter Bypass via Header Manipulation
+Description: Rate limiting could be circumvented by rotating X-Forwarded-For headers in certain proxy configurations.
+Remediation: Rate limiting now keys on authenticated principal ID rather than IP address.
+
+Infrastructure Recommendations:
+- Implement network segmentation between API servers and database tier
+- Enable WAF rules for common attack patterns
+- Add anomaly detection for unusual retrieval patterns
+- Rotate all service account credentials quarterly
+
+Next audit scheduled for July 2026.

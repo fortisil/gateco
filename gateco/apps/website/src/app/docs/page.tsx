@@ -174,18 +174,23 @@ print(result.status, result.latency_ms)`,
     subsections: [
       {
         title: 'Create a Policy',
-        example: `# Python — RBAC policy
+        example: `# Python — RBAC policy with proper condition format
 policy = client.policies.create(
     name="Engineering Data Access",
     type="rbac",
     effect="allow",
     description="Allow engineering team to access internal docs",
-    resource_selectors=[{
-        "classification": "internal",
-        "domain": "engineering",
-    }],
+    resource_selectors=["connector_abc"],
     rules=[{
-        "role": "engineer",
+        "effect": "allow",
+        "priority": 1,
+        "description": "Engineers can access internal docs",
+        "conditions": [
+            # resource. prefix = check resource metadata
+            {"field": "resource.classification", "operator": "lte", "value": "internal"},
+            # principal. prefix = check requesting identity
+            {"field": "principal.roles", "operator": "contains", "value": "engineer"},
+        ],
     }],
 )
 
@@ -199,6 +204,17 @@ client.policies.activate(policy.id)`,
           'Draft — Created but not enforced. Safe to edit and test.',
           'Active — Enforced on all retrievals. Use the Access Simulator (Pro) to test before activating.',
           'Archived — Retained for audit history but no longer enforced.',
+        ],
+      },
+      {
+        title: 'Policy Condition Fields',
+        detail: 'Condition fields MUST be prefixed with resource. or principal. — bare field names silently resolve against the principal, not the resource.',
+        list: [
+          'Resource fields: resource.classification, resource.sensitivity, resource.domain, resource.labels, resource.encryption_mode',
+          'Principal fields: principal.roles, principal.groups, principal.attributes.*',
+          'Operators: eq, ne, in, contains, lte (ordered level comparison), gte (ordered level comparison)',
+          'WARNING: Bare field names (e.g., "classification" without prefix) check principal attributes, not resource metadata',
+          'Deny policy gotcha: when a deny policy\'s selectors match but no rules match, the policy-level effect=deny fires. Add a catch-all allow rule to deny only specific conditions.',
         ],
       },
     ],

@@ -197,4 +197,5 @@ async def update_resource(
             raise ValidationError(detail=f"Invalid encryption_mode: {data['encryption_mode']}")
 
     await session.flush()
+    await session.refresh(r)
     return _serialize(r)

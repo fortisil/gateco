@@ -1,0 +1,19 @@
+Gateco Product FAQ
+
+Q: What is Gateco?
+A: Gateco is a permission-aware retrieval layer that sits between AI agents and your organization's knowledge bases. It ensures every retrieval respects your access control policies.
+
+Q: Which vector databases does Gateco support?
+A: Gateco supports pgvector, Pinecone, Weaviate, Milvus, Chroma, Qdrant, Elasticsearch, and OpenSearch as connector types.
+
+Q: How does permission gating work?
+A: When an AI agent queries for information, Gateco evaluates ABAC policies against resource metadata (classification, sensitivity, department) to determine which results the requesting principal can access.
+
+Q: What is deny-by-default?
+A: Gateco operates on a deny-by-default principle. If no explicit policy grants access to a resource, the retrieval is denied. This ensures data is protected even before policies are fully configured.
+
+Q: What are connectors?
+A: Connectors are integrations with external vector databases. Each connector manages connection credentials, search configuration, and ingestion settings for a specific data source.
+
+Q: How do I get started?
+A: Sign up at gateco.ai, create a connector to your vector database, ingest documents with metadata, create access policies, and start making permission-gated retrievals through our SDK.

@@ -1,0 +1,9 @@
+Gateco Company Overview
+
+Gateco provides a permission-aware retrieval layer for AI systems, enabling organizations to securely gate access to their digital knowledge bases. Founded to address the growing need for enterprise AI security, Gateco serves as the middleware between AI agents and organizational data.
+
+Our platform enforces identity-based access controls, policy-driven permission checks, and comprehensive audit trails for every retrieval operation. Gateco integrates with popular vector databases including pgvector, Pinecone, Weaviate, and Milvus.
+
+Key features include real-time policy enforcement, multi-connector support, semantic search with permission gating, and compliance-ready audit logging. Gateco supports ABAC (Attribute-Based Access Control) policies that evaluate resource metadata against organizational rules.
+
+The company is headquartered in San Francisco and serves enterprise customers across finance, healthcare, and technology sectors. Our mission is to make AI systems trustworthy by ensuring they respect organizational boundaries and data governance requirements.

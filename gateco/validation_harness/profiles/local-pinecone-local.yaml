@@ -1,0 +1,29 @@
+profile_name: local-pinecone-local
+provider_mode: emulator
+base_url: "${GATECO_BASE_URL:-http://localhost:8000}"
+
+credentials:
+  email: "${GATECO_EMAIL:-admin@acmecorp.com}"
+  password: "${GATECO_PASSWORD:-password123}"
+
+connector:
+  type: pinecone
+  config:
+    api_key: "pclocal"
+    host: "${PINECONE_LOCAL_HOST:-http://localhost:5081}"
+
+features:
+  auth: true
+  connectors: true
+  ingestion: true
+  retroactive: true
+  policies: true
+  retrievals: true
+  metadata_resolution: true
+  simulator: true
+  audit: true
+  dashboard: true
+  billing: true
+
+output_dir: ".validation_harness/output"
+resource_prefix: "vh-"

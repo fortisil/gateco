@@ -1,0 +1,30 @@
+profile_name: ci-pinecone
+provider_mode: native
+base_url: "${GATECO_BASE_URL:-http://localhost:8000}"
+
+credentials:
+  email: "${GATECO_EMAIL:-admin@acmecorp.com}"
+  password: "${GATECO_PASSWORD:-password123}"
+
+connector:
+  type: pinecone
+  config:
+    api_key: "${PINECONE_API_KEY}"
+    environment: "${PINECONE_ENVIRONMENT:-us-east-1-aws}"
+    index_name: "${PINECONE_INDEX:-gateco-test}"
+
+features:
+  auth: true
+  connectors: true
+  ingestion: true
+  retroactive: true
+  policies: true
+  retrievals: true
+  metadata_resolution: true
+  simulator: true
+  audit: true
+  dashboard: true
+  billing: true
+
+output_dir: ".validation_harness/output"
+resource_prefix: "vh-ci-"

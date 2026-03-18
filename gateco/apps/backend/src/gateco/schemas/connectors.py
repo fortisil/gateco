@@ -94,6 +94,16 @@ class ConnectorResponse(BaseModel):
     last_test_latency_ms: int | None = None
     server_version: str | None = None
     diagnostics: dict | None = None
+    policy_readiness_level: int | None = None
+    search_config: dict | None = None
+    connection_ready: bool = False
+    search_ready: bool = False
+    bound_vector_count: int = 0
+    coverage_pct: float | None = None
+    ingestion_capable: bool = False
+    ingestion_ready: bool = False
+    ingestion_config: dict | None = None
+    metadata_resolution_mode: str = "sidecar"
 
 
 class DiscoveredResourceSchema(BaseModel):

@@ -8,7 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from gateco.database.connection import get_session
 from gateco.database.enums import AuditEventType
 from gateco.database.models.user import User
-from gateco.middleware.entitlement import check_resource_limit, require_feature
+from gateco.exceptions import EntitlementError
+from gateco.middleware.entitlement import PLAN_FEATURES, check_resource_limit, require_feature
 from gateco.middleware.jwt_auth import get_current_user
 from gateco.schemas.policies import CreatePolicyRequest, UpdatePolicyRequest
 from gateco.services import audit_service, policy_service
@@ -25,7 +26,7 @@ async def list_policies(
     return {"data": data}
 
 
-@router.post("", status_code=201, dependencies=[require_feature("policy_studio")])
+@router.post("", status_code=201)
 async def create_policy(
     body: CreatePolicyRequest,
     request: Request,
@@ -33,6 +34,13 @@ async def create_policy(
     session: AsyncSession = Depends(get_session),
 ):
     plan = getattr(request.state, "plan", "free")
+    # Feature gate — runs after get_current_user so request.state.plan is set
+    features = PLAN_FEATURES.get(plan, PLAN_FEATURES["free"])
+    if not features.get("policy_studio", False):
+        raise EntitlementError(
+            detail=f"Feature 'policy_studio' is not available on the {plan} plan",
+            upgrade_to="pro" if plan == "free" else "enterprise",
+        )
     await check_resource_limit("policies", session, user.organization_id, plan)
     result = await policy_service.create_policy(
         session, user.organization_id, body.model_dump(), created_by=user.id,
@@ -58,7 +66,7 @@ async def get_policy(
     return await policy_service.get_policy(session, user.organization_id, policy_id)
 
 
-@router.patch("/{policy_id}", dependencies=[require_feature("policy_studio")])
+@router.patch("/{policy_id}")
 async def update_policy(
     policy_id: UUID,
     body: UpdatePolicyRequest,
@@ -66,6 +74,14 @@ async def update_policy(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ):
+    # Feature gate — runs after get_current_user so request.state.plan is set
+    plan = getattr(request.state, "plan", "free")
+    features = PLAN_FEATURES.get(plan, PLAN_FEATURES["free"])
+    if not features.get("policy_studio", False):
+        raise EntitlementError(
+            detail=f"Feature 'policy_studio' is not available on the {plan} plan",
+            upgrade_to="pro" if plan == "free" else "enterprise",
+        )
     result = await policy_service.update_policy(
         session, user.organization_id, policy_id, body.model_dump(exclude_unset=True),
     )

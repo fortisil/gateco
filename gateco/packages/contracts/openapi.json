@@ -935,14 +935,32 @@
         "title": "OrganizationResponse",
         "type": "object"
       },
+      "PolicyCondition": {
+        "type": "object",
+        "description": "A single condition within a policy rule. Field must be prefixed: resource.classification, principal.groups, etc. Bare names silently check principal.",
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "Prefixed field: resource.(classification|sensitivity|domain|labels|encryption_mode) or principal.(roles|groups|attributes.*)"
+          },
+          "operator": {
+            "type": "string",
+            "enum": ["eq", "ne", "in", "contains", "lte", "gte"]
+          },
+          "value": {
+            "description": "Comparison value. Type depends on operator."
+          }
+        },
+        "required": ["field", "operator", "value"],
+        "title": "PolicyCondition"
+      },
       "PolicyRuleRequest": {
         "properties": {
           "conditions": {
             "anyOf": [
               {
                 "items": {
-                  "additionalProperties": true,
-                  "type": "object"
+                  "$ref": "#/components/schemas/PolicyCondition"
                 },
                 "type": "array"
               },

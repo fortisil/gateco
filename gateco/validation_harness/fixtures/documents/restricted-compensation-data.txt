@@ -1,0 +1,25 @@
+Restricted Compensation Data - 2026
+
+Classification: Restricted
+Access: HR Director and CEO Only
+Sensitivity: Critical
+
+Executive Compensation Summary:
+
+CEO - Annual Base: $225,000 | Equity: 12% vested over 4 years | Bonus Target: 40%
+CTO - Annual Base: $210,000 | Equity: 8% vested over 4 years | Bonus Target: 35%
+CFO - Annual Base: $195,000 | Equity: 5% vested over 4 years | Bonus Target: 35%
+VP Engineering - Annual Base: $190,000 | Equity: 3% vested over 4 years | Bonus Target: 30%
+VP Sales - Annual Base: $175,000 | Equity: 2.5% vested over 4 years | Bonus Target: 50% (commission)
+
+Engineering Salary Bands:
+- Staff Engineer (L6): $185,000 - $220,000
+- Senior Engineer (L5): $155,000 - $190,000
+- Engineer (L4): $130,000 - $160,000
+- Junior Engineer (L3): $105,000 - $135,000
+
+Benefits Budget per Employee: $18,500 annually
+Total Compensation Budget 2026: $8.2M (48 FTE projected)
+Equity Pool Remaining: 15.3% of fully diluted shares
+
+Note: This data is subject to strict confidentiality requirements. Unauthorized disclosure may result in termination and legal action.

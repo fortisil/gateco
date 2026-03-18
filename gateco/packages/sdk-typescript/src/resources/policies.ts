@@ -65,7 +65,19 @@ export class PoliciesResource {
     return parsePolicy(data as Record<string, unknown>);
   }
 
-  /** Create a new policy. */
+  /**
+   * Create a new policy.
+   *
+   * Each rule's `conditions` array contains objects with `field`, `operator`, and `value`.
+   * Fields must be prefixed: `resource.classification`, `principal.roles`, etc.
+   * Bare field names silently resolve against the principal.
+   *
+   * Operators: `eq`, `ne`, `in`, `contains`, `lte`, `gte`.
+   *
+   * Deny policy note: when a deny policy's selectors match but no rules match,
+   * the policy-level `effect=deny` fires. Add a catch-all allow rule to deny
+   * only specific conditions.
+   */
   async create(options: CreatePolicyOptions): Promise<Policy> {
     const body: Record<string, unknown> = {
       name: options.name,

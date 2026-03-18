@@ -39,7 +39,7 @@ with GatecoClient("https://api.gateco.dev") as client:
 ## Core Concepts
 
 - **Connectors** — Connections to vector databases (pgvector, Pinecone, Qdrant, Weaviate, Milvus, Chroma, OpenSearch, Supabase, Neon).
-- **Policies** — Access rules (RBAC, ABAC, REBAC) evaluated at every retrieval. Deny-by-default.
+- **Policies** — Access rules (RBAC, ABAC, REBAC) evaluated at every retrieval. Deny-by-default. Rule conditions require `resource.` or `principal.` field prefixes.
 - **Secured Retrievals** — Permission-checked queries that enforce all active policies against the requesting principal.
 - **Principals** — Identities requesting access: users, service accounts, or AI agents.
 - **Gated Resources** — Vector data with security metadata: classification, sensitivity, domain, ownership.

@@ -1,0 +1,33 @@
+profile_name: ci-pgvector
+provider_mode: native
+base_url: "${GATECO_BASE_URL:-http://localhost:8000}"
+
+credentials:
+  email: "${GATECO_EMAIL:-admin@acmecorp.com}"
+  password: "${GATECO_PASSWORD:-password123}"
+
+connector:
+  type: pgvector
+  config:
+    host: "${PGVECTOR_HOST:-localhost}"
+    port: 5432
+    database: "${PGVECTOR_DATABASE:-gateco_test}"
+    user: "${PGVECTOR_USER:-test}"
+    password: "${PGVECTOR_PASSWORD:-test}"
+    schema: "public"
+
+features:
+  auth: true
+  connectors: true
+  ingestion: true
+  retroactive: true
+  policies: true
+  retrievals: true
+  metadata_resolution: true
+  simulator: true
+  audit: true
+  dashboard: true
+  billing: true
+
+output_dir: ".validation_harness/output"
+resource_prefix: "vh-ci-"

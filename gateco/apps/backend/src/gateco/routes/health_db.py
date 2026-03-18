@@ -5,7 +5,6 @@ Returns database connectivity and migration status.
 """
 
 import logging
-import os
 
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
@@ -24,9 +23,9 @@ async def health_db():
     Returns:
         JSONResponse: 200 with DB details if healthy, 503 if not ready.
     """
-    database_url = os.getenv("DATABASE_URL", "")
+    from gateco.database.settings import db_settings
 
-    if not database_url:
+    if not db_settings.is_configured:
         return JSONResponse(
             status_code=503,
             content={
@@ -37,7 +36,7 @@ async def health_db():
         )
 
     try:
-        from .database.connection import engine
+        from gateco.database.connection import engine
 
         if engine is None:
             return JSONResponse(

@@ -1,0 +1,43 @@
+# Phase 2: Principal definitions for multi-principal testing
+# These are reserved for future IDP-synced principal testing
+
+principals:
+  - id: admin-user
+    name: Sarah Chen
+    email: admin@acmecorp.com
+    role: admin
+    department: engineering
+    clearance_level: restricted
+    idp: local
+
+  - id: engineering-lead
+    name: Alex Rivera
+    email: alex.rivera@acmecorp.com
+    role: engineering_lead
+    department: engineering
+    clearance_level: internal
+    idp: local
+
+  - id: finance-analyst
+    name: Jordan Kim
+    email: jordan.kim@acmecorp.com
+    role: analyst
+    department: finance
+    clearance_level: confidential
+    idp: local
+
+  - id: marketing-manager
+    name: Taylor Brooks
+    email: taylor.brooks@acmecorp.com
+    role: manager
+    department: marketing
+    clearance_level: internal
+    idp: local
+
+  - id: external-contractor
+    name: Casey Morgan
+    email: casey.morgan@contractor.com
+    role: contractor
+    department: external
+    clearance_level: public
+    idp: local

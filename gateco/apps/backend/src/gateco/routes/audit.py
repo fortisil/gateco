@@ -5,7 +5,7 @@ import io
 import json
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import StreamingResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,7 +13,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from gateco.database.connection import get_session
 from gateco.database.models.audit_event import AuditEvent
 from gateco.database.models.user import User
-from gateco.middleware.entitlement import require_feature
+from gateco.exceptions import EntitlementError
+from gateco.middleware.entitlement import PLAN_FEATURES
 from gateco.middleware.jwt_auth import get_current_user
 from gateco.schemas.common import paginate_meta
 
@@ -72,8 +73,9 @@ async def list_audit_events(
     return {"data": data, "meta": paginate_meta(page, per_page, total)}
 
 
-@router.post("/export", dependencies=[require_feature("audit_export")])
+@router.post("/export")
 async def export_audit_log(
+    request: Request,
     event_types: str | None = None,
     date_from: str | None = None,
     date_to: str | None = None,
@@ -82,6 +84,14 @@ async def export_audit_log(
     session: AsyncSession = Depends(get_session),
 ):
     """Export audit log as JSON or CSV (requires audit_export feature)."""
+    plan = getattr(request.state, "plan", "free")
+    features = PLAN_FEATURES.get(plan, PLAN_FEATURES["free"])
+    if not features.get("audit_export", False):
+        raise EntitlementError(
+            detail=f"Feature 'audit_export' is not available on the {plan} plan",
+            upgrade_to="pro" if plan == "free" else "enterprise",
+        )
+
     query = select(AuditEvent).where(AuditEvent.organization_id == user.organization_id)
 
     if event_types:

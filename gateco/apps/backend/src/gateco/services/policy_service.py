@@ -22,18 +22,10 @@ def _serialize_rule(r: PolicyRule) -> dict:
     }
 
 
-def _serialize_selectors(selectors: list | None) -> list[str]:
+def _serialize_selectors(selectors: list | None) -> list:
     if not selectors:
         return []
-    result = []
-    for s in selectors:
-        if isinstance(s, str):
-            result.append(s)
-        elif isinstance(s, dict):
-            result.append(f"{s.get('field', '')} {s.get('op', '')} {s.get('value', '')}")
-        else:
-            result.append(str(s))
-    return result
+    return list(selectors)
 
 
 def _serialize(p: Policy) -> dict:
@@ -145,8 +137,8 @@ async def update_policy(
 
 async def activate_policy(session: AsyncSession, org_id: UUID, policy_id: UUID) -> dict:
     p = await _load(session, org_id, policy_id)
-    if p.status != PolicyStatus.draft:
-        raise ValidationError(detail="Only draft policies can be activated")
+    if p.status not in (PolicyStatus.draft, PolicyStatus.archived):
+        raise ValidationError(detail="Only draft or archived policies can be activated")
     if not p.rules:
         raise ValidationError(detail="Policy must have at least one rule to activate")
     p.status = PolicyStatus.active

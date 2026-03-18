@@ -2,9 +2,10 @@
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from gateco.database.connection import get_session
@@ -13,8 +14,8 @@ from gateco.database.models.policy import Policy
 from gateco.database.models.principal import Principal
 from gateco.database.models.resource import GatedResource
 from gateco.database.models.user import User
-from gateco.exceptions import NotFoundError
-from gateco.middleware.entitlement import require_feature
+from gateco.exceptions import EntitlementError, NotFoundError
+from gateco.middleware.entitlement import PLAN_FEATURES
 from gateco.middleware.jwt_auth import get_current_user
 from gateco.services.policy_engine import evaluate_policies
 
@@ -40,14 +41,22 @@ class SimulationResponse(BaseModel):
 @router.post(
     "/run",
     response_model=SimulationResponse,
-    dependencies=[require_feature("access_simulator")],
 )
 async def run_simulation(
     body: SimulationRequest,
+    request: Request,
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ):
     """Dry-run policy evaluation for a principal against resources."""
+    plan = getattr(request.state, "plan", "free")
+    features = PLAN_FEATURES.get(plan, PLAN_FEATURES["free"])
+    if not features.get("access_simulator", False):
+        raise EntitlementError(
+            detail=f"Feature 'access_simulator' is not available on the {plan} plan",
+            upgrade_to="pro" if plan == "free" else "enterprise",
+        )
+
     org_id = user.organization_id
 
     # Load principal
@@ -84,7 +93,9 @@ async def run_simulation(
 
     # Load active policies
     result = await session.execute(
-        select(Policy).where(
+        select(Policy)
+        .options(selectinload(Policy.rules))
+        .where(
             Policy.organization_id == org_id,
             Policy.status == PolicyStatus.active,
             Policy.deleted_at.is_(None),

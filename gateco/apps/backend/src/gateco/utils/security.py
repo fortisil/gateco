@@ -2,6 +2,7 @@
 
 import datetime
 import os
+import uuid
 from uuid import UUID
 
 from jose import JWTError, jwt
@@ -48,6 +49,7 @@ def create_access_token(
         "type": "access",
         "exp": exp,
         "iat": now,
+        "jti": uuid.uuid4().hex,
     }
     return jwt.encode(payload, _get_secret(), algorithm=JWT_ALGORITHM)
 
@@ -56,7 +58,11 @@ def create_refresh_token(
     user_id: UUID,
     expires_delta: datetime.timedelta | None = None,
 ) -> str:
-    """Create a long-lived JWT refresh token."""
+    """Create a long-lived JWT refresh token.
+
+    Includes a random ``jti`` (JWT ID) claim to guarantee uniqueness even when
+    the same user generates multiple tokens within the same second.
+    """
     now = datetime.datetime.now(datetime.timezone.utc)
     exp = now + (expires_delta or datetime.timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS))
     payload = {
@@ -64,6 +70,7 @@ def create_refresh_token(
         "type": "refresh",
         "exp": exp,
         "iat": now,
+        "jti": uuid.uuid4().hex,
     }
     return jwt.encode(payload, _get_secret(), algorithm=JWT_ALGORITHM)
 

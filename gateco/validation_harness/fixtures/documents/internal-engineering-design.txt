@@ -1,0 +1,17 @@
+Internal Engineering Design Document
+
+Project: Gateco Retrieval Pipeline v2
+Status: In Development
+Classification: Internal
+
+The retrieval pipeline processes incoming queries through four stages: query parsing, vector search, permission evaluation, and response assembly. This document outlines the architectural changes planned for version 2.
+
+Stage 1 - Query Parsing: Extracts intent signals and metadata filters from the natural language query. The parser supports structured filters alongside semantic search terms.
+
+Stage 2 - Vector Search: Delegates to the configured connector adapter. Each adapter normalizes the connector-specific query format and handles pagination of raw vector results.
+
+Stage 3 - Permission Evaluation: The policy engine evaluates each candidate result against active ABAC policies. Results are classified as allowed, denied, or redacted based on the requesting principal's attributes and the resource metadata.
+
+Stage 4 - Response Assembly: Aggregates allowed results, computes policy traces for audit, and returns the gated response with outcome classification (allowed, denied, partial).
+
+Performance target: p95 latency under 200ms for the permission evaluation stage with up to 100 candidate results.

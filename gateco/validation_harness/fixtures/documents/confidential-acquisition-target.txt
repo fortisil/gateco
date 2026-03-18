@@ -1,0 +1,26 @@
+Confidential Acquisition Analysis
+
+Classification: Confidential
+Prepared for: Executive Team
+Date: February 2026
+
+Target: VectorGuard Inc.
+Sector: AI Infrastructure Security
+Headquarters: Austin, TX
+
+Company Profile:
+VectorGuard provides embedding-level encryption and access control for vector database deployments. Founded in 2024 with seed funding of $3.5M. Current team of 18 employees including 12 engineers. Revenue estimated at $800K ARR with 45 enterprise customers.
+
+Strategic Rationale:
+Acquiring VectorGuard would strengthen Gateco's chunk-level security capabilities with cryptographic access control. Their patented embedding encryption technology would complement our policy-based permission gating. Combined product would offer the most comprehensive AI data security solution in market.
+
+Financial Assessment:
+Estimated acquisition price: $15M-$20M (4-5x forward revenue). Key assets include 3 patents on vector encryption, engineering talent, and existing customer relationships. Integration timeline estimated at 6 months for technology, 3 months for team.
+
+Risks:
+- Key person dependency on CTO and 2 principal engineers
+- Technology integration complexity with our async pipeline
+- Customer overlap with 8 accounts
+- Regulatory review timeline for patent transfer
+
+Recommendation: Proceed to preliminary discussions. Assign M&A counsel for initial outreach.

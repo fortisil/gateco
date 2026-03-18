@@ -4,9 +4,18 @@ export type PolicyStatus = 'draft' | 'active' | 'archived';
 
 export type PolicyEffect = 'allow' | 'deny';
 
+/**
+ * A single condition within a policy rule.
+ *
+ * Fields must be prefixed with `resource.` or `principal.`:
+ * - Resource: `resource.classification`, `resource.sensitivity`, `resource.domain`, `resource.labels`, `resource.encryption_mode`
+ * - Principal: `principal.roles`, `principal.groups`, `principal.attributes.*`
+ *
+ * WARNING: Bare field names (e.g., `classification`) silently resolve against the principal, not the resource.
+ */
 export interface PolicyCondition {
   field: string;
-  operator: 'eq' | 'neq' | 'in' | 'not_in' | 'contains' | 'gte' | 'lte';
+  operator: 'eq' | 'ne' | 'in' | 'contains' | 'gte' | 'lte';
   value: string | string[] | number;
 }
 

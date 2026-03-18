@@ -57,9 +57,11 @@ async def check_resource_limit(
     if model is None:
         return
 
-    result = await session.execute(
-        select(func.count()).select_from(model).where(model.organization_id == org_id)
-    )
+    query = select(func.count()).select_from(model).where(model.organization_id == org_id)
+    # Exclude soft-deleted records from limit counts
+    if hasattr(model, "deleted_at"):
+        query = query.where(model.deleted_at.is_(None))
+    result = await session.execute(query)
     count = result.scalar() or 0
 
     if count >= limit:

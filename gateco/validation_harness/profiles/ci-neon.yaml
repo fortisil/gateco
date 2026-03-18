@@ -1,0 +1,28 @@
+profile_name: ci-neon
+provider_mode: emulated_local_postgres
+base_url: "${GATECO_BASE_URL:-http://localhost:8000}"
+
+credentials:
+  email: "${GATECO_EMAIL:-admin@acmecorp.com}"
+  password: "${GATECO_PASSWORD:-password123}"
+
+connector:
+  type: neon
+  config:
+    connection_string: "postgresql://${NEON_USER:-test}:${NEON_PASSWORD:-test}@${NEON_HOST:-localhost}:5432/${NEON_DATABASE:-gateco_test}"
+
+features:
+  auth: true
+  connectors: true
+  ingestion: true
+  retroactive: true
+  policies: true
+  retrievals: true
+  metadata_resolution: true
+  simulator: true
+  audit: true
+  dashboard: true
+  billing: true
+
+output_dir: ".validation_harness/output"
+resource_prefix: "vh-ci-"

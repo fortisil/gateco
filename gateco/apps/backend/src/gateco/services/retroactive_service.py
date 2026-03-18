@@ -1,7 +1,8 @@
 """Retroactive registration service — scans vector DBs for unmanaged vectors and registers them.
 
-Discovers vectors in Tier 1 connectors that were inserted outside Gateco's ingestion pipeline,
-then creates GatedResource + ResourceChunk records so they become policy-managed.
+Discovers vectors in connectors that have a list_vector_ids adapter, regardless of whether they
+support direct ingestion. Creates GatedResource + ResourceChunk records so they become
+policy-managed.
 """
 
 import logging
@@ -27,9 +28,9 @@ from gateco.schemas.retroactive import (
     RetroactiveRegisterResponse,
 )
 from gateco.services import audit_service
-from gateco.services.connector_adapters import list_vector_ids
+from gateco.services.connector_adapters import LISTERS, list_vector_ids
 from gateco.services.connector_service import _load
-from gateco.services.ingestion_service import TIER_1_CONNECTORS, VALID_CLASSIFICATIONS, VALID_SENSITIVITIES
+from gateco.services.ingestion_service import VALID_CLASSIFICATIONS, VALID_SENSITIVITIES
 from gateco.utils.crypto import decrypt_config_secrets
 
 logger = logging.getLogger(__name__)
@@ -61,12 +62,12 @@ async def retroactive_register(
 
     # 1. Load and validate connector
     connector = await _load(session, org_id, connector_id)
-    if connector.type not in TIER_1_CONNECTORS:
+    if connector.type.value not in LISTERS:
         raise ValidationError(
             detail=(
                 f"Connector type '{connector.type.value}' is not supported for "
-                f"retroactive registration. Tier 1 types: "
-                f"{', '.join(t.value for t in TIER_1_CONNECTORS)}"
+                f"retroactive registration. Supported types: "
+                f"{', '.join(sorted(LISTERS.keys()))}"
             ),
         )
 

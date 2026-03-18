@@ -604,6 +604,8 @@ async def _list_qdrant_ids(
                 headers=headers,
                 json=body,
             )
+            if resp.status_code == 404:
+                return []  # Collection does not exist yet
             resp.raise_for_status()
             result = resp.json().get("result", {})
             points = result.get("points", [])

@@ -322,16 +322,34 @@ policy = client.policies.create(
     type="rbac",
     effect="allow",
     description="Allow engineering team to access internal docs",
-    resource_selectors=[{
-        "classification": "internal",
-        "domain": "engineering",
-    }],
+    resource_selectors=["connector_abc"],
     rules=[{
-        "role": "engineer",
+        "effect": "allow",
+        "priority": 1,
+        "description": "Engineers can access internal docs",
+        "conditions": [
+            {"field": "resource.classification", "operator": "lte", "value": "internal"},
+            {"field": "principal.roles", "operator": "contains", "value": "engineer"},
+        ],
     }],
 )
 client.policies.activate(policy.id)
 ```
+
+### Policy Condition Fields
+
+Condition fields **must** be prefixed with `resource.` or `principal.`:
+
+| Prefix | Available Fields |
+|--------|-----------------|
+| `resource.` | `classification`, `sensitivity`, `domain`, `labels`, `encryption_mode` |
+| `principal.` | `roles`, `groups`, `attributes.*` |
+
+> **WARNING:** Bare field names (e.g., `classification` without prefix) silently resolve against the **principal**, not the resource. Always use `resource.classification`.
+
+**Operators:** `eq`, `ne`, `in`, `contains`, `lte` (ordered level comparison), `gte` (ordered level comparison).
+
+**Deny policy default-effect:** When a deny policy's selectors match but none of its rules match, the policy-level `effect=deny` fires. To deny only specific conditions, add a catch-all allow rule at lowest priority.
 
 ### Policy Lifecycle
 

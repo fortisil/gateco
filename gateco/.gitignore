@@ -48,3 +48,6 @@ data/
 
 # Docker
 *.pid
+
+# Validation harness output
+.validation_harness/output/

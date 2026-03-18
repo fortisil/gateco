@@ -1,0 +1,30 @@
+Internal Quarterly Roadmap Q2 2026
+
+Classification: Internal
+Department: Product Strategy
+
+Priority 1: Multi-IDP Support
+- Integrate AWS IAM, Azure AD, and Okta as identity providers
+- Implement principal synchronization for external directory services
+- Target: End of April 2026
+
+Priority 2: Enhanced Policy Engine
+- Add time-based policy conditions (business hours, expiry dates)
+- Implement policy simulation improvements
+- Support nested attribute evaluation in ABAC conditions
+- Target: Mid-May 2026
+
+Priority 3: Enterprise Connector Expansion
+- Add native Databricks Vector Search connector
+- Implement connection pooling for high-throughput deployments
+- Add health monitoring dashboard for connector fleet
+- Target: End of June 2026
+
+Priority 4: Compliance Reporting
+- Automated compliance report generation (SOC2, HIPAA)
+- Data residency controls for multi-region deployments
+- Audit log retention and export enhancements
+- Target: End of June 2026
+
+Team allocation: 3 backend engineers, 2 frontend engineers, 1 DevOps
+Budget: Within existing Q2 allocation

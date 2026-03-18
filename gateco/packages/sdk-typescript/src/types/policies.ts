@@ -11,7 +11,19 @@ export type PolicyStatus = "draft" | "active" | "archived";
 /** Policy evaluation effect. */
 export type PolicyEffect = "allow" | "deny";
 
-/** A single condition within a policy rule. */
+/**
+ * A single condition within a policy rule.
+ *
+ * Fields must be prefixed with `resource.` or `principal.`:
+ * - Resource: `resource.classification`, `resource.sensitivity`, `resource.domain`,
+ *   `resource.labels`, `resource.encryption_mode`
+ * - Principal: `principal.roles`, `principal.groups`, `principal.attributes.*`
+ *
+ * Operators: `eq`, `ne`, `in`, `contains`, `lte`, `gte`.
+ *
+ * WARNING: Bare field names (e.g., `classification`) silently resolve against the
+ * principal, not the resource. Always use `resource.classification`.
+ */
 export interface PolicyCondition {
   field?: string;
   operator?: string;

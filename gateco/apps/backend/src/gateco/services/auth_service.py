@@ -150,6 +150,17 @@ async def login(
 
     org = user.organization
 
+    # Revoke existing active sessions for this user to prevent stale session
+    # accumulation and avoid refresh_token_hash collisions.
+    existing = await session.execute(
+        select(UserSession).where(
+            UserSession.user_id == user.id,
+            UserSession.revoked_at.is_(None),
+        )
+    )
+    for s in existing.scalars().all():
+        s.revoke()
+
     _, refresh, token_resp = _build_tokens(user, org)
     user_session = UserSession(
         user_id=user.id,

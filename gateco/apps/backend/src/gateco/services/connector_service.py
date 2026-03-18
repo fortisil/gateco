@@ -19,7 +19,7 @@ def _secret_fields(connector_type: str) -> list[str]:
     return CONNECTOR_SECRET_FIELDS.get(connector_type, [])
 
 
-def _serialize(c: Connector, bound_vector_count: int = 0) -> dict:
+def _serialize(c: Connector, bound_vector_count: int = 0, has_active_policies: bool = False) -> dict:
     config = mask_config_secrets(c.config or {}, _secret_fields(c.type.value))
     search_cfg = c.search_config
     connection_ready = c.status == ConnectorStatus.connected
@@ -60,6 +60,7 @@ def _serialize(c: Connector, bound_vector_count: int = 0) -> dict:
         search_ready,
         coverage_pct,
         metadata_resolution_mode=mode,
+        has_active_policies=has_active_policies,
         has_resource_level_bindings=has_resource_level_bindings,
         has_chunk_level_policy_metadata=has_chunk_level,
     )
@@ -131,8 +132,15 @@ async def list_connectors(session: AsyncSession, org_id: UUID) -> list[dict]:
     else:
         bound_counts = {}
 
+    # Check which connectors have active policies targeting them
+    active_policy_connectors = await _connectors_with_active_policies(session, org_id)
+
     return [
-        _serialize(c, bound_vector_count=bound_counts.get(c.id, 0))
+        _serialize(
+            c,
+            bound_vector_count=bound_counts.get(c.id, 0),
+            has_active_policies=c.id in active_policy_connectors,
+        )
         for c in connectors
     ]
 
@@ -149,7 +157,12 @@ async def get_connector(session: AsyncSession, org_id: UUID, connector_id: UUID)
         )
     )
     bound_count = count_result.scalar() or 0
-    return _serialize(c, bound_vector_count=bound_count)
+    active_policy_connectors = await _connectors_with_active_policies(session, org_id)
+    return _serialize(
+        c,
+        bound_vector_count=bound_count,
+        has_active_policies=c.id in active_policy_connectors,
+    )
 
 
 async def create_connector(
@@ -201,6 +214,7 @@ async def update_connector(
         _validate_metadata_resolution_mode(metadata_resolution_mode, c.type.value)
         c.metadata_resolution_mode = metadata_resolution_mode
     await session.flush()
+    await session.refresh(c)
     return _serialize(c)
 
 
@@ -215,6 +229,7 @@ async def update_search_config(
         raise ValidationError(detail=f"Missing required search config fields: {', '.join(missing)}")
     c.search_config = search_config
     await session.flush()
+    await session.refresh(c)
     return _serialize(c)
 
 
@@ -237,6 +252,7 @@ async def update_ingestion_config(
     c = await _load(session, org_id, connector_id)
     c.ingestion_config = ingestion_config
     await session.flush()
+    await session.refresh(c)
     return _serialize(c)
 
 
@@ -289,6 +305,34 @@ def _validate_metadata_resolution_mode(mode: str, connector_type: str) -> None:
             detail=f"sql_view mode is only available for Postgres-family connectors "
             f"({', '.join(sorted(POSTGRES_FAMILY_TYPES))}), not '{connector_type}'"
         )
+
+
+async def _connectors_with_active_policies(
+    session: AsyncSession, org_id: UUID
+) -> set[UUID]:
+    """Return connector IDs that have at least one active policy targeting them."""
+    from gateco.database.enums import PolicyStatus
+    from gateco.database.models.policy import Policy
+
+    result = await session.execute(
+        select(Policy.resource_selectors).where(
+            Policy.organization_id == org_id,
+            Policy.status == PolicyStatus.active,
+            Policy.deleted_at.is_(None),
+            Policy.resource_selectors.isnot(None),
+        )
+    )
+    connector_ids: set[UUID] = set()
+    for (selectors,) in result.all():
+        if selectors:
+            for sel in selectors:
+                cid = sel.get("connector_id")
+                if cid:
+                    try:
+                        connector_ids.add(UUID(cid) if isinstance(cid, str) else cid)
+                    except (ValueError, AttributeError):
+                        pass
+    return connector_ids
 
 
 async def _load(session: AsyncSession, org_id: UUID, connector_id: UUID) -> Connector:
