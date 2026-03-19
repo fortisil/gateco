@@ -77,14 +77,21 @@ async def s19_principal_policies(ctx: ScenarioContext) -> None:
             effect="deny",
             description="Deny marketing group access to confidential resources",
             resource_selectors=[{"connector_id": connector_id}],
-            rules=[{
-                "effect": "deny",
-                "priority": 100,
-                "conditions": [
-                    {"field": "principal.groups", "operator": "contains", "value": ["marketing"]},
-                    {"field": "resource.classification", "operator": "eq", "value": "confidential"},
-                ],
-            }],
+            rules=[
+                {
+                    "effect": "deny",
+                    "priority": 100,
+                    "conditions": [
+                        {"field": "principal.groups", "operator": "contains", "value": ["marketing"]},
+                        {"field": "resource.classification", "operator": "eq", "value": "confidential"},
+                    ],
+                },
+                {
+                    "effect": "allow",
+                    "priority": 1,
+                    "conditions": [],
+                },
+            ],
         )
     except Exception as exc:
         ctx.assert_that("Create marketing-deny-confidential", False, actual=str(exc))

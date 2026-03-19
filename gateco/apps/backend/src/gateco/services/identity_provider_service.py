@@ -93,6 +93,7 @@ async def update_identity_provider(
     if sync_config is not None:
         idp.sync_config = sync_config
     await session.flush()
+    await session.refresh(idp)
     return _serialize(idp)
 
 
@@ -184,6 +185,7 @@ async def trigger_sync(
         )
 
     await session.flush()
+    await session.refresh(idp)
     return _serialize(idp)
 
 
