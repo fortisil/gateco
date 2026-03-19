@@ -59,9 +59,12 @@ class AWSIAMAdapter(BaseIDPAdapter):
                 email=email,
                 groups=user_groups.get(uid, []),
                 roles=[],
+                # Gateco test convention: AWS Identity Store has no native "department"
+                # field. The UserType field is used to store department for test data.
                 attributes={
                     k: v for k, v in {
                         "title": u.get("Title"),
+                        "department": u.get("UserType"),
                     }.items() if v
                 },
             ))

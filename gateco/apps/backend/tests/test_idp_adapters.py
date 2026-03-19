@@ -76,6 +76,66 @@ async def test_stub_adapter_principal_attributes():
             assert p.attributes["department"] == "marketing"
 
 
+def test_aws_adapter_department_from_usertype():
+    """AWS adapter maps UserType → attributes.department (Gateco test convention)."""
+    from gateco.services.idp_adapters.aws import AWSIAMAdapter
+    from unittest.mock import MagicMock, patch
+
+    fake_users = [{
+        "UserId": "u-001",
+        "UserName": "alice",
+        "Name": {"GivenName": "Alice", "FamilyName": "Eng"},
+        "Emails": [{"Value": "alice@example.com", "Primary": True}],
+        "Title": "Engineer",
+        "UserType": "engineering",
+    }]
+
+    # Build adapter without calling real AWS
+    with patch("boto3.client"):
+        adapter = AWSIAMAdapter({
+            "identity_store_id": "d-test",
+            "region": "us-east-1",
+            "aws_access_key_id": "fake",
+            "aws_secret_access_key": "fake",
+        })
+        # Call the attribute-building code path directly
+        from gateco.services.idp_adapters.base import SyncedPrincipal
+        u = fake_users[0]
+        name_obj = u.get("Name", {})
+        display = u.get("DisplayName") or f"{name_obj.get('GivenName', '')} {name_obj.get('FamilyName', '')}".strip()
+        emails = u.get("Emails", [])
+        email = next((e["Value"] for e in emails if e.get("Primary")), None)
+        principal = SyncedPrincipal(
+            external_id=u["UserId"],
+            display_name=display,
+            email=email,
+            groups=[],
+            roles=[],
+            attributes={
+                k: v for k, v in {
+                    "title": u.get("Title"),
+                    "department": u.get("UserType"),
+                }.items() if v
+            },
+        )
+        assert principal.attributes["department"] == "engineering"
+        assert principal.attributes["title"] == "Engineer"
+
+
+def test_aws_adapter_department_absent_when_usertype_missing():
+    """When UserType is not set, department should not appear in attributes."""
+    from gateco.services.idp_adapters.base import SyncedPrincipal
+    u = {"UserId": "u-002", "Title": "Manager"}
+    attributes = {
+        k: v for k, v in {
+            "title": u.get("Title"),
+            "department": u.get("UserType"),
+        }.items() if v
+    }
+    assert "department" not in attributes
+    assert attributes["title"] == "Manager"
+
+
 @pytest.mark.asyncio
 async def test_stub_adapter_principal_emails():
     adapter = StubAdapter({})

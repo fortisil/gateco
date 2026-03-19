@@ -368,6 +368,38 @@ jobs:
           PINECONE_ENVIRONMENT: ${{ secrets.PINECONE_ENVIRONMENT }}
           PINECONE_INDEX: ${{ secrets.PINECONE_INDEX }}
 
+      - name: Seed Okta test data
+        continue-on-error: true
+        if: env.OKTA_API_TOKEN != ''
+        run: |
+          echo "Real-provider sandbox validation (not stub)"
+          cd validation_harness
+          python scripts/seed_okta.py --domain "$OKTA_DOMAIN" --api-token "$OKTA_API_TOKEN"
+        env:
+          OKTA_DOMAIN: ${{ secrets.OKTA_DOMAIN }}
+          OKTA_API_TOKEN: ${{ secrets.OKTA_API_TOKEN }}
+
+      - name: Run Okta IDP validation
+        continue-on-error: true
+        if: env.OKTA_API_TOKEN != ''
+        run: |
+          cd validation_harness
+          gateco-validate doctor -p profiles/ci-okta.yaml
+          timeout 300 gateco-validate run -p profiles/ci-okta.yaml --format all
+        env:
+          OKTA_DOMAIN: ${{ secrets.OKTA_DOMAIN }}
+          OKTA_API_TOKEN: ${{ secrets.OKTA_API_TOKEN }}
+
+      - name: Teardown Okta test data
+        if: always() && env.OKTA_API_TOKEN != ''
+        continue-on-error: true
+        run: |
+          cd validation_harness
+          python scripts/seed_okta.py --domain "$OKTA_DOMAIN" --api-token "$OKTA_API_TOKEN" --teardown
+        env:
+          OKTA_DOMAIN: ${{ secrets.OKTA_DOMAIN }}
+          OKTA_API_TOKEN: ${{ secrets.OKTA_API_TOKEN }}
+
       - name: Generate CI summary
         if: always()
         run: |
