@@ -19,4 +19,7 @@ from validation_harness.scenarios import (  # noqa: F401
     s15_coverage_readiness,
     s16_dashboard,
     s17_billing_readonly,
+    s18_idp_lifecycle,
+    s19_principal_policies,
+    s20_principal_retrieval,
 )

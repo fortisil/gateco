@@ -25,6 +25,13 @@ features:
   audit: true
   dashboard: true
   billing: true
+  identity_providers: true
+
+identity_provider:
+  type: okta
+  config:
+    domain: "vh-test.okta.com"
+    api_token: "vh-fake-token"
 
 output_dir: ".validation_harness/output"
 resource_prefix: "vh-ci-"

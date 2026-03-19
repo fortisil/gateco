@@ -109,6 +109,20 @@ class CleanupManager:
         except Exception as exc:
             logger.warning("Failed to list policies for prefix cleanup: %s", exc)
 
+        # Try to clean up identity providers with prefix
+        try:
+            page = await client.identity_providers.list(per_page=100)
+            for idp in page.items:
+                if hasattr(idp, "name") and idp.name.startswith(prefix):
+                    try:
+                        await client.identity_providers.delete(idp.id)
+                        deleted += 1
+                        logger.info("Deleted identity provider: %s", idp.name)
+                    except Exception as exc:
+                        logger.warning("Failed to delete IDP %s: %s", idp.name, exc)
+        except Exception as exc:
+            logger.warning("Failed to list IDPs for prefix cleanup: %s", exc)
+
         return deleted
 
     async def _delete_resource(self, client: Any, resource: CreatedResource) -> None:
@@ -123,5 +137,11 @@ class CleanupManager:
         elif rtype == "resource":
             # Resources are typically cleaned up with their connector
             logger.info("Resource %s cleanup deferred to connector deletion", rid)
+        elif rtype == "identity_provider":
+            try:
+                await client.identity_providers.delete(rid)
+            except Exception as exc:
+                logger.warning("IDP %s delete failed (may have dependent principals): %s", rid, exc)
+                raise
         else:
             logger.warning("Unknown resource type for cleanup: %s", rtype)

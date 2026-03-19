@@ -18,6 +18,13 @@ class ConnectorConfig(BaseModel):
     config: dict[str, Any] = Field(default_factory=dict)
 
 
+class IdentityProviderConfig(BaseModel):
+    """Identity provider settings from profile — used by s18 to create the test IDP."""
+
+    type: str = "okta"
+    config: dict[str, Any] = Field(default_factory=lambda: {"domain": "vh-test.okta.com", "api_token": "vh-fake-token"})
+
+
 class CredentialsConfig(BaseModel):
     """Authentication credentials from profile."""
 
@@ -39,6 +46,7 @@ class FeaturesConfig(BaseModel):
     audit: bool = True
     dashboard: bool = True
     billing: bool = True
+    identity_providers: bool = True
 
 
 class HarnessConfig(BaseModel):
@@ -48,6 +56,7 @@ class HarnessConfig(BaseModel):
     base_url: str = "http://localhost:8000"
     credentials: CredentialsConfig = Field(default_factory=CredentialsConfig)
     connector: ConnectorConfig = Field(default_factory=ConnectorConfig)
+    identity_provider: IdentityProviderConfig = Field(default_factory=IdentityProviderConfig)
     features: FeaturesConfig = Field(default_factory=FeaturesConfig)
     output_dir: str = ".validation_harness/output"
     resource_prefix: str = "vh-"
