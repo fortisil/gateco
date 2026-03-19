@@ -1,0 +1,44 @@
+profile_name: ci-aws-iam
+provider_mode: native
+base_url: "${GATECO_BASE_URL:-http://localhost:8000}"
+
+credentials:
+  email: "${GATECO_EMAIL:-admin@acmecorp.com}"
+  password: "${GATECO_PASSWORD:-password123}"
+
+connector:
+  type: pgvector
+  config:
+    host: "${PGVECTOR_HOST:-localhost}"
+    port: 5432
+    database: "${PGVECTOR_DATABASE:-gateco_test}"
+    user: "${PGVECTOR_USER:-test}"
+    password: "${PGVECTOR_PASSWORD:-test}"
+    schema: "public"
+
+features:
+  auth: true
+  connectors: true
+  ingestion: true
+  retroactive: true
+  policies: true
+  retrievals: true
+  metadata_resolution: true
+  simulator: true
+  audit: true
+  dashboard: true
+  billing: true
+  identity_providers: true
+
+identity_provider:
+  type: aws_iam
+  config:
+    identity_store_id: "${AWS_IDENTITY_STORE_ID}"
+    region: "${AWS_REGION:-us-east-1}"
+    aws_access_key_id: "${AWS_ACCESS_KEY_ID}"
+    aws_secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
+  engineering_group: "${AWS_ENGINEERING_GROUP:-engineering}"
+  marketing_group: "${AWS_MARKETING_GROUP:-marketing}"
+
+output_dir: ".validation_harness/output"
+resource_prefix: "vh-aws-"

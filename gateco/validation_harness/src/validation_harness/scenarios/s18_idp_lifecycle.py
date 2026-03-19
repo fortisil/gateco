@@ -1,8 +1,12 @@
 """s18_idp_lifecycle — Create IDP, trigger sync, verify principals, update, list.
 
 NOTE: These scenarios validate Gateco's identity-provider object lifecycle and
-principal-aware enforcement using the backend's stub sync. They do NOT validate
-real SCIM/OIDC/SAML provider integrations.
+principal-aware enforcement. When run against real provider credentials (Okta,
+Azure Entra ID, AWS IAM Identity Center, GCP), the sync step exercises actual
+SCIM/OIDC/SAML provider integrations. Group names are configurable via the
+profile's ``identity_provider.engineering_group`` and
+``identity_provider.marketing_group`` fields to accommodate provider-specific
+group naming conventions.
 """
 
 from __future__ import annotations
@@ -24,6 +28,8 @@ async def s18_idp_lifecycle(ctx: ScenarioContext) -> None:
     prefix = ctx.config.resource_prefix
     idp_type = ctx.config.identity_provider.type
     idp_config = dict(ctx.config.identity_provider.config)
+    eng_group = ctx.config.identity_provider.engineering_group
+    mkt_group = ctx.config.identity_provider.marketing_group
 
     # Step 1: Create IDP
     ctx.begin_step("create_idp")
@@ -67,9 +73,9 @@ async def s18_idp_lifecycle(ctx: ScenarioContext) -> None:
             actual=getattr(refreshed, "status", None),
         )
         ctx.assert_that(
-            "Principal count >= 5",
-            hasattr(refreshed, "principal_count") and refreshed.principal_count >= 5,
-            expected=">=5",
+            "Principal count >= 2",
+            hasattr(refreshed, "principal_count") and refreshed.principal_count >= 2,
+            expected=">=2",
             actual=getattr(refreshed, "principal_count", None),
         )
         ctx.assert_that(
@@ -88,9 +94,9 @@ async def s18_idp_lifecycle(ctx: ScenarioContext) -> None:
         principals_page = await ctx.client.principals.list(per_page=100)
         all_principals = principals_page.items
         ctx.assert_that(
-            "At least 5 principals exist",
-            len(all_principals) >= 5,
-            expected=">=5",
+            "At least 2 principals exist",
+            len(all_principals) >= 2,
+            expected=">=2",
             actual=len(all_principals),
         )
 
@@ -98,9 +104,9 @@ async def s18_idp_lifecycle(ctx: ScenarioContext) -> None:
         marketing_principals: list[str] = []
         for p in all_principals:
             groups = getattr(p, "groups", None) or []
-            if "engineering" in groups:
+            if eng_group in groups:
                 engineering_principals.append(str(p.id))
-            if "marketing" in groups:
+            if mkt_group in groups:
                 marketing_principals.append(str(p.id))
 
         ctx.assert_that(
@@ -125,20 +131,20 @@ async def s18_idp_lifecycle(ctx: ScenarioContext) -> None:
         if engineering_principals:
             eng_p = await ctx.client.principals.get(engineering_principals[0])
             ctx.assert_that(
-                "Engineering principal has department=engineering",
+                f"Engineering principal has department={eng_group}",
                 hasattr(eng_p, "attributes")
-                and (eng_p.attributes or {}).get("department") == "engineering",
-                expected="engineering",
+                and (eng_p.attributes or {}).get("department") == eng_group,
+                expected=eng_group,
                 actual=(getattr(eng_p, "attributes", None) or {}).get("department"),
             )
 
         if marketing_principals:
             mkt_p = await ctx.client.principals.get(marketing_principals[0])
             ctx.assert_that(
-                "Marketing principal has department=marketing",
+                f"Marketing principal has department={mkt_group}",
                 hasattr(mkt_p, "attributes")
-                and (mkt_p.attributes or {}).get("department") == "marketing",
-                expected="marketing",
+                and (mkt_p.attributes or {}).get("department") == mkt_group,
+                expected=mkt_group,
                 actual=(getattr(mkt_p, "attributes", None) or {}).get("department"),
             )
     except Exception as exc:

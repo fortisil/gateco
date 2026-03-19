@@ -1,0 +1,43 @@
+profile_name: ci-azure
+provider_mode: native
+base_url: "${GATECO_BASE_URL:-http://localhost:8000}"
+
+credentials:
+  email: "${GATECO_EMAIL:-admin@acmecorp.com}"
+  password: "${GATECO_PASSWORD:-password123}"
+
+connector:
+  type: pgvector
+  config:
+    host: "${PGVECTOR_HOST:-localhost}"
+    port: 5432
+    database: "${PGVECTOR_DATABASE:-gateco_test}"
+    user: "${PGVECTOR_USER:-test}"
+    password: "${PGVECTOR_PASSWORD:-test}"
+    schema: "public"
+
+features:
+  auth: true
+  connectors: true
+  ingestion: true
+  retroactive: true
+  policies: true
+  retrievals: true
+  metadata_resolution: true
+  simulator: true
+  audit: true
+  dashboard: true
+  billing: true
+  identity_providers: true
+
+identity_provider:
+  type: azure_entra_id
+  config:
+    tenant_id: "${AZURE_TENANT_ID}"
+    client_id: "${AZURE_CLIENT_ID}"
+    client_secret: "${AZURE_CLIENT_SECRET}"
+  engineering_group: "${AZURE_ENGINEERING_GROUP:-engineering}"
+  marketing_group: "${AZURE_MARKETING_GROUP:-marketing}"
+
+output_dir: ".validation_harness/output"
+resource_prefix: "vh-azure-"

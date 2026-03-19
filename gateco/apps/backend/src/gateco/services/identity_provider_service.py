@@ -18,7 +18,8 @@ from gateco.database.models.principal_group import PrincipalGroup
 from gateco.exceptions import NotFoundError, ValidationError
 from gateco.schemas.identity_providers import IDP_SECRET_FIELDS
 from gateco.services import audit_service
-from gateco.utils.crypto import encrypt_config_secrets, mask_config_secrets
+from gateco.services.idp_adapters import sync_from_provider
+from gateco.utils.crypto import decrypt_config_secrets, encrypt_config_secrets, mask_config_secrets
 from gateco.utils.patch import apply_patch
 
 
@@ -106,17 +107,23 @@ async def trigger_sync(
     session: AsyncSession, org_id: UUID, idp_id: UUID,
     actor_id: UUID | None = None, actor_name: str = "",
 ) -> dict:
-    """Stub sync: creates mock principals + groups, updates counts."""
+    """Dispatch sync to the appropriate IDP adapter, upsert principals and groups, update counts."""
     idp = await _load(session, org_id, idp_id)
     idp.status = IdentityProviderStatus.syncing
     await session.flush()
 
     try:
-        # Mock: create 5 principals and 2 groups
         now = datetime.datetime.now(datetime.timezone.utc)
-        mock_names = ["Alice", "Bob", "Carol", "Dave", "Eve"]
-        for i, name in enumerate(mock_names):
-            ext_id = f"ext-{idp_id}-{i}"
+
+        # Decrypt stored secrets before passing config to the adapter
+        decrypted = decrypt_config_secrets(idp.config or {}, _secret_fields(idp.type.value))
+
+        # Dispatch to the real adapter (falls back to stub for fake/placeholder configs)
+        result = await sync_from_provider(idp.type.value, decrypted)
+
+        # Upsert principals
+        for sp in result.principals:
+            ext_id = f"{idp.id}-{sp.external_id}"
             existing = await session.execute(
                 select(Principal).where(
                     Principal.organization_id == org_id,
@@ -124,23 +131,31 @@ async def trigger_sync(
                     Principal.external_id == ext_id,
                 )
             )
-            if existing.scalar_one_or_none():
-                continue
-            session.add(Principal(
-                organization_id=org_id,
-                identity_provider_id=idp.id,
-                external_id=ext_id,
-                display_name=name,
-                email=f"{name.lower()}@example.com",
-                groups=["engineering"] if i < 3 else ["marketing"],
-                roles=["viewer"],
-                attributes={"department": "engineering" if i < 3 else "marketing"},
-                status=PrincipalStatus.active,
-                last_seen=now,
-            ))
+            principal = existing.scalar_one_or_none()
+            if principal:
+                principal.display_name = sp.display_name
+                principal.email = sp.email
+                principal.groups = sp.groups
+                principal.roles = sp.roles
+                principal.attributes = sp.attributes
+                principal.last_seen = now
+            else:
+                session.add(Principal(
+                    organization_id=org_id,
+                    identity_provider_id=idp.id,
+                    external_id=ext_id,
+                    display_name=sp.display_name,
+                    email=sp.email,
+                    groups=sp.groups,
+                    roles=sp.roles,
+                    attributes=sp.attributes,
+                    status=PrincipalStatus.active,
+                    last_seen=now,
+                ))
 
-        for g_name, count in [("engineering", 3), ("marketing", 2)]:
-            ext_id = f"grp-{idp_id}-{g_name}"
+        # Upsert groups
+        for sg in result.groups:
+            ext_id = f"{idp.id}-{sg.external_id}"
             existing = await session.execute(
                 select(PrincipalGroup).where(
                     PrincipalGroup.organization_id == org_id,
@@ -148,18 +163,23 @@ async def trigger_sync(
                     PrincipalGroup.external_id == ext_id,
                 )
             )
-            if existing.scalar_one_or_none():
-                continue
-            session.add(PrincipalGroup(
-                organization_id=org_id,
-                identity_provider_id=idp.id,
-                external_id=ext_id,
-                name=g_name,
-                member_count=count,
-            ))
+            group = existing.scalar_one_or_none()
+            if group:
+                group.name = sg.name
+                group.member_count = sg.member_count
+            else:
+                session.add(PrincipalGroup(
+                    organization_id=org_id,
+                    identity_provider_id=idp.id,
+                    external_id=ext_id,
+                    name=sg.name,
+                    member_count=sg.member_count,
+                ))
 
-        idp.principal_count = 5
-        idp.group_count = 2
+        principal_count = len(result.principals)
+        group_count = len(result.groups)
+        idp.principal_count = principal_count
+        idp.group_count = group_count
         idp.last_sync = now
         idp.status = IdentityProviderStatus.connected
         idp.error_message = None
@@ -170,18 +190,21 @@ async def trigger_sync(
             event_type=AuditEventType.idp_synced,
             actor_id=actor_id,
             actor_name=actor_name,
-            details=f"IDP sync completed: {idp.name} (5 principals, 2 groups)",
+            details=f"IDP sync completed: {idp.name} ({principal_count} principals, {group_count} groups)",
         )
     except Exception as e:
         idp.status = IdentityProviderStatus.error
-        idp.error_message = str(e)
+        # Sanitize error message to avoid leaking credentials or internal URLs
+        err_type = type(e).__name__
+        err_msg = str(e)[:200]  # Truncate to avoid exposing full request details
+        idp.error_message = f"{err_type}: {err_msg}"
         await audit_service.emit_event(
             session=session,
             org_id=org_id,
             event_type=AuditEventType.idp_sync_failed,
             actor_id=actor_id,
             actor_name=actor_name,
-            details=f"IDP sync failed: {idp.name} — {e}",
+            details=f"IDP sync failed: {idp.name} — {err_type}",
         )
 
     await session.flush()

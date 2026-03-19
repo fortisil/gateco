@@ -23,6 +23,8 @@ class IdentityProviderConfig(BaseModel):
 
     type: str = "okta"
     config: dict[str, Any] = Field(default_factory=lambda: {"domain": "vh-test.okta.com", "api_token": "vh-fake-token"})
+    engineering_group: str = "engineering"
+    marketing_group: str = "marketing"
 
 
 class CredentialsConfig(BaseModel):
